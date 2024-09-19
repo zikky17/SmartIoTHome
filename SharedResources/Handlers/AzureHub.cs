@@ -5,7 +5,7 @@ namespace SharedResources.Handlers;
 
 public class AzureHub
 {
-    private readonly string _connectionString = "HostName=net23-kyh-iothub.azure-devices.net;SharedAccessKeyName=iothubowner;SharedAccessKey=Z8qRGjMhpz0qILrCzGpihrsQjOQ0+qeYLAIoTDj84P8=";
+    private readonly string _connectionString = "HostName=gurra-iothub.azure-devices.net;SharedAccessKeyName=iothubowner;SharedAccessKey=/6xdlTOp1WhRRbgMsWuAS+FCnQSBLRI9BAIoTAU4LdE=";
     private readonly RegistryManager? _registry;
     private readonly ServiceClient? _serviceClient;
 
