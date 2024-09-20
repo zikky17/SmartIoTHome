@@ -1,5 +1,7 @@
 ﻿using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
+using Microsoft.Extensions.Logging;
+using SharedResources.Handlers;
 using SmartLight.ViewModels;
 using SmartLight.Views;
 using System.Windows;
@@ -12,6 +14,7 @@ namespace SmartLight
     public partial class App : Application
     {
         private static IHost? host;
+        private readonly ILogger _logger;
 
         public App()
         {
@@ -40,6 +43,27 @@ namespace SmartLight
             catch { }
 
             await host!.RunAsync();
+
+            InitializeDevice();
+        }
+
+        private void InitializeDevice()
+        {
+            var dc = new DeviceClientHandler("e677eda9-6bf4-48b9-83da-60785bf972e6", "SmartLight", "Light");
+
+            var initalizeResult = dc.Initialize();
+
+            dc.Settings.DeviceStateChanged += (deviceState) =>
+            {
+                _logger.LogInformation($"{deviceState}");
+            };
+
+
+            AppDomain.CurrentDomain.ProcessExit += (s, e) =>
+            {
+                var disconnectResult = dc.Disconnect();
+               _logger.LogInformation($"Disconnect {disconnectResult}");
+            };
         }
     }
 
