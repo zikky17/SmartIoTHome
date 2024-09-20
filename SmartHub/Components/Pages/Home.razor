@@ -1,5 +1,71 @@
 ﻿@page "/"
+@using SmartHub.ViewModels
+@using SharedResources.Models
+@inject HomeVM viewModel
 
-<h1>Hello, world!</h1>
+<div class="container">
 
-Welcome to your new app.
+    <div class="devices hub-container">
+        @if (Devices != null)
+        {
+            foreach (var device in Devices)
+            {
+                var icon = device?.DeviceType?.ToLower() switch
+                {
+                    "light" => "fa-regular fa-lightbulb",
+                    "fan" => "fa-regular fa-fan",
+                    "temp" => "fa-sharp fa-light fa-temperature-high",
+                    _ => "fa-regular fa-microchip"
+
+                };
+
+                var iconClass = device?.DeviceType?.ToLower() switch
+                {
+                    "light" => "icon-light",
+                    "fan" => "icon-fan",
+                    "temp" => "icon-temp",
+                    _ => "icon-default"
+                };
+
+
+                <div class="container">
+                    <div id="@device!.DeviceId" class="device @(device.DeviceState ? "active" : null)">
+                        <div class="body">
+                            <i class="@icon @iconClass"></i>
+                            <div class="title">@device.DeviceName</div>
+                            <div class="state">@(device.ConnectionState ? "Connected" : "Connecting...")</div>
+                        </div>
+                        <footer>
+                            <label class="switch">
+                                <InputCheckbox @bind-Value="device.DeviceState" @onclick="() => viewModel.OnDeviceStateChanged(device)" disabled="@(device.ConnectionState == false)" />
+                                <span class="slider round"></span>
+                            </label>
+                        </footer>
+                    </div>
+                </div>
+            }
+        }
+        else
+        {
+            <div class="preloader">
+                <i class="fa-solid fa-spinner-third fa-spin"></i>
+            </div>
+        }
+    </div>
+</div>
+
+@code {
+    private IEnumerable<SmartDeviceModel> Devices = [];
+
+    protected override async Task OnInitializedAsync()
+    {
+        Devices = await viewModel.GetDevicesAsync();
+        viewModel.Timer = new Timer(async _ => await SetDevicesAsync(), null, 0, viewModel.TimerInterval);
+    }
+
+    private async Task SetDevicesAsync()
+    {
+        Devices = await viewModel.GetDevicesAsync();
+        await InvokeAsync(StateHasChanged);
+    }
+}

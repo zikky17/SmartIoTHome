@@ -1,0 +1,78 @@
+﻿<UserControl x:Class="SmartFan.Views.HomeView"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:local="clr-namespace:SmartFan.Views"
+             mc:Ignorable="d" 
+             xmlns:viewmodels="clr-namespace:SmartFan.ViewModels"
+             d:DataContext="{d:DesignInstance Type=viewmodels:HomeVM}"
+             d:DesignHeight="700" d:DesignWidth="400">
+
+    <UserControl.Resources>
+        <BeginStoryboard x:Key="rotate-sb">
+            <Storyboard RepeatBehavior="Forever">
+                <DoubleAnimation Storyboard.TargetName="Rotating" 
+                            Storyboard.TargetProperty="Angle" 
+                            From="0" 
+                            To="360"/>
+            </Storyboard>
+        </BeginStoryboard>
+    </UserControl.Resources>
+
+
+
+
+
+    <Grid>
+
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="200*"/>
+            <ColumnDefinition Width="15*"/>
+        </Grid.ColumnDefinitions>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="auto" />
+            <RowDefinition Height="auto" />
+            <RowDefinition Height="auto" />
+            <RowDefinition Height="*" />
+            <RowDefinition Height="auto" />
+            <RowDefinition Height="auto" />
+        </Grid.RowDefinitions>
+
+
+        <StackPanel Grid.Row="2" HorizontalAlignment="Center" Margin="20 50 20 50">
+            <TextBlock Text="FAN UNIT" FontSize="46" Foreground="White" HorizontalAlignment="Center" FontFamily="{StaticResource poppins-thin}"></TextBlock>
+            <TextBlock Text="SMART HOME" FontSize="18" Foreground="White" HorizontalAlignment="Center" FontFamily="{StaticResource poppins-regular}"></TextBlock>
+        </StackPanel>
+
+        <Grid Grid.Row="3">
+            <TextBlock Text="&#xf863;" 
+                       FontFamily="{StaticResource fa-solid}" 
+                       FontSize="150"
+                       Margin="0 0 0 150"
+                       HorizontalAlignment="Center"
+                       VerticalAlignment="Center"
+                       RenderTransformOrigin="0.5 0.5"
+                       Foreground="White">
+                <TextBlock.RenderTransform>
+                    <RotateTransform x:Name="Rotating" Angle="0" />
+                </TextBlock.RenderTransform>
+            </TextBlock>
+        </Grid>
+
+        <Button 
+        Grid.Row="5" 
+        Margin="40 0 0 40" 
+        Style="{StaticResource btn}"
+        Width="auto"
+        Content="&#xf013;"
+        FontFamily="{StaticResource fa-solid}" 
+        HorizontalAlignment="Right"
+        FontSize="28"
+        Command="{Binding GoToSettingsCommand}"
+        x:Name="Settings" >
+        </Button>
+
+    </Grid>
+</UserControl>
+

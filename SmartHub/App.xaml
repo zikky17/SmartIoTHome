@@ -6,20 +6,11 @@
     <Application.Resources>
         <ResourceDictionary>
 
-            <Color x:Key="PageBackgroundColor">#512bdf</Color>
-            <Color x:Key="PrimaryTextColor">White</Color>
+            <Color x:Key="Dark">#000000</Color>
+            <Color x:Key="White">#FFFFFF</Color>
 
-            <Style TargetType="Label">
-                <Setter Property="TextColor" Value="{DynamicResource PrimaryTextColor}" />
-                <Setter Property="FontFamily" Value="OpenSansRegular" />
-            </Style>
-
-            <Style TargetType="Button">
-                <Setter Property="TextColor" Value="{DynamicResource PrimaryTextColor}" />
-                <Setter Property="FontFamily" Value="OpenSansRegular" />
-                <Setter Property="BackgroundColor" Value="#2b0b98" />
-                <Setter Property="Padding" Value="14,10" />
-            </Style>
+            <Color x:Key="PageBackgroundColor">#16191F</Color>
+            <Color x:Key="PrimaryTextColor">#B5B6B8</Color>
 
         </ResourceDictionary>
     </Application.Resources>

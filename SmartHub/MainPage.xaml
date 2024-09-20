@@ -2,6 +2,7 @@
 <ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              xmlns:local="clr-namespace:SmartHub"
+             xmlns:toolkit="http://schemas.microsoft.com/dotnet/2022/maui/toolkit"
              x:Class="SmartHub.MainPage"
              BackgroundColor="{DynamicResource PageBackgroundColor}">
 
@@ -10,5 +11,12 @@
             <RootComponent Selector="#app" ComponentType="{x:Type local:Components.Routes}" />
         </BlazorWebView.RootComponents>
     </BlazorWebView>
+
+    <ContentPage.Behaviors>
+        <toolkit:StatusBarBehavior
+         StatusBarColor="{StaticResource Dark}"
+         StatusBarStyle="LightContent"
+         />
+    </ContentPage.Behaviors>
 
 </ContentPage>

@@ -231,7 +231,7 @@ namespace SharedResources.Handlers
             return response;
         }
 
-        public void ConnectionStatusChangeHandler(ConnectionStatus status, ConnectionStatusChangeReason reson)
+        public void ConnectionStatusChangeHandler(ConnectionStatus status, ConnectionStatusChangeReason reason)
         {
             if (status == ConnectionStatus.Disconnected || status == ConnectionStatus.Disabled)
             {
@@ -243,3 +243,4 @@ namespace SharedResources.Handlers
             }
         }
     }
+}
