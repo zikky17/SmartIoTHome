@@ -5,8 +5,39 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:SmartLight"
         mc:Ignorable="d"
-        Title="MainWindow" Height="450" Width="800">
-    <Grid>
+        xmlns:viewmodels="clr-namespace:SmartLight.ViewModels"
+        d:DataContext="{d:DesignInstance Type=viewmodels:MainWindowVM}"
+        Height="700" Width="400"
+        WindowStyle="None"
+        Background="Transparent"
+        AllowsTransparency="True">
 
-    </Grid>
+
+    <Border Background="SlateGray" CornerRadius="30">
+
+        <Grid>
+            <Grid.RowDefinitions>
+                <RowDefinition Height="Auto" />
+                <RowDefinition Height="*" />
+            </Grid.RowDefinitions>
+
+            <Border CornerRadius="30,30,0,0"
+             Background="SlateGray"
+             x:Name="TopWindowBar"
+             MouseLeftButtonDown="TopWindowBar_MouseLeftButtonDown"
+             Height="30"
+             Grid.Row="0">
+            </Border>
+
+            <Button x:Name="ExitButton"
+             Click="ExitButton_Click"
+             Style="{StaticResource powerButton}"
+             HorizontalAlignment="Right"
+             VerticalAlignment="Top"
+             Margin="10" />
+
+            <ContentControl Content="{Binding CurrentViewModel}" Grid.Row="1" />
+        </Grid>
+
+    </Border>
 </Window>
