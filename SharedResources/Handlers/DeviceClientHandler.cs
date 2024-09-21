@@ -100,7 +100,7 @@ namespace SharedResources.Handlers
 
             var result = await UpdateDeviceTwinDeviceStateAsync();
             if (result.Succeeded)
-                return GenerateMethodResponse("DeviceState changed set to start", 200);
+                return GenerateMethodResponse("Device has successfully started.", 200);
             else
                 return GenerateMethodResponse($"{result.Message}", 400);
         }
@@ -111,7 +111,7 @@ namespace SharedResources.Handlers
 
             var result = await UpdateDeviceTwinDeviceStateAsync();
             if (result.Succeeded)
-                return GenerateMethodResponse("DeviceState changed set to stop", 200);
+                return GenerateMethodResponse("Device has successfully stopped.", 200);
             else
                 return GenerateMethodResponse($"{result.Message}", 400);
         }
