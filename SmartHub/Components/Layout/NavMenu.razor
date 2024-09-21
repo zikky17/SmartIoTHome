@@ -1,4 +1,6 @@
-﻿<div class="container">
+﻿@inject NavigationManager Navigation
+
+<div class="container">
     <NavLink href="" Match="NavLinkMatch.All">
         <i class="fa-duotone fa-solid fa-microchip"></i>
         <span class="title">DEVICES</span>
@@ -9,7 +11,7 @@
         <span class="title">ADD DEVICE</span>
     </NavLink>
 
-    <NavLink href="settings">
+    <NavLink href="/settings">
         <i class="fa-duotone fa-solid fa-gear"></i>
         <span class="title">SETTINGS</span>
     </NavLink>

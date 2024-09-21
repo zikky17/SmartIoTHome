@@ -1,6 +1,7 @@
 ﻿using CommunityToolkit.Maui;
 using Microsoft.Extensions.Logging;
 using SharedResources.Handlers;
+using SmartHub.Components.Pages;
 using SmartHub.ViewModels;
 
 namespace SmartHub
@@ -26,6 +27,8 @@ namespace SmartHub
 #endif
             builder.Services.AddTransient<HomeVM>();
             builder.Services.AddTransient<AzureHub>();
+            builder.Services.AddTransient<SettingsVM>();
+            builder.Services.AddTransient<Settings>();
 
             return builder.Build();
         }
