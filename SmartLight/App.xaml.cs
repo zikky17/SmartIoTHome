@@ -38,18 +38,20 @@ namespace SmartLight
             using var cts = new CancellationTokenSource();
             try
             {
+                InitializeDevice();
                 await host!.RunAsync(cts.Token);
             }
             catch { }
 
             await host!.RunAsync();
 
-            InitializeDevice();
+          
         }
 
         private void InitializeDevice()
         {
-            var dc = new DeviceClientHandler("e677eda9-6bf4-48b9-83da-60785bf972e6", "SmartLight", "Light");
+            var connectionString = "HostName=gurra-iothub.azure-devices.net;DeviceId=f0468151-3b8b-4d92-8e42-cf679a27796f;SharedAccessKey=6ycjkPeWyIRubkKcKX9BjTmOuZn0mBr6tAIoTN5ynLI=";
+            var dc = new DeviceClientHandler("f0468151-3b8b-4d92-8e42-cf679a27796f", "SmartLight", "Light", connectionString);
 
             var initalizeResult = dc.Initialize();
 
@@ -57,14 +59,8 @@ namespace SmartLight
             {
                 _logger.LogInformation($"{deviceState}");
             };
-
-
-            AppDomain.CurrentDomain.ProcessExit += (s, e) =>
-            {
-                var disconnectResult = dc.Disconnect();
-               _logger.LogInformation($"Disconnect {disconnectResult}");
-            };
         }
+
     }
 
 }

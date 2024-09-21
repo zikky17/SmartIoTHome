@@ -11,12 +11,12 @@ namespace SharedResources.Handlers
         public SmartDeviceModel Settings { get; private set; } = new();
         private DeviceClient? _client;
 
-        public DeviceClientHandler(string deviceId, string deviceName, string deviceType)
+        public DeviceClientHandler(string deviceId, string deviceName, string deviceType, string connectionString)
         {
             Settings!.DeviceId = deviceId;
             Settings.DeviceName = deviceName;
             Settings.DeviceType = deviceType;
-            Settings.ConnectionString = "HostName=gurra-iothub.azure-devices.net;DeviceId=f0468151-3b8b-4d92-8e42-cf679a27796f;SharedAccessKey=6ycjkPeWyIRubkKcKX9BjTmOuZn0mBr6tAIoTN5ynLI=";
+            Settings.ConnectionString = connectionString;
         }
 
         public ResultResponse Initialize()
@@ -61,12 +61,14 @@ namespace SharedResources.Handlers
 
             try
             {
+                Settings.ConnectionState = false;
                 Settings.DeviceState = false;
                 Task.Run(UpdateDeviceTwinDeviceStateAsync);
                 UpdateDeviceTwinConnectionStateAsync(false).Wait();
 
                 response.Succeeded = true;
                 response.Message = "Device disconnected.";
+
 
             }
             catch (Exception ex)
