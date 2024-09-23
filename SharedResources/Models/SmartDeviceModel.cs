@@ -1,4 +1,7 @@
-﻿namespace SharedResources.Models;
+﻿using Microsoft.Azure.Devices;
+using Microsoft.Azure.Devices.Shared;
+
+namespace SharedResources.Models;
 
 public class SmartDeviceModel
 {
@@ -8,6 +11,8 @@ public class SmartDeviceModel
     public string DeviceId { get; set; } = null!;
     public string? DeviceName { get; set; }
     public string? DeviceType { get; set; }
+    public Device? Device { get; set; }
+    public Twin? Twin { get; set; }
 
 
     public event Action<bool>? DeviceStateChanged;
