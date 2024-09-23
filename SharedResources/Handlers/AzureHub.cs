@@ -1,5 +1,6 @@
 ﻿using Microsoft.Azure.Devices;
 using SharedResources.Models;
+using System.Configuration;
 
 namespace SharedResources.Handlers;
 

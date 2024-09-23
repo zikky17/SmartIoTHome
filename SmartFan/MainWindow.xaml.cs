@@ -22,7 +22,7 @@ namespace SmartFan
         {
             AppDomain.CurrentDomain.ProcessExit += async (s, e) =>
             {
-                var connectionString = ConfigurationManager.AppSettings["FanConnectionString"]!;
+                var connectionString = "HostName=gurra-iothub.azure-devices.net;DeviceId=cabb9896-0fba-47d2-b67d-0279a9745284;SharedAccessKey=ZY2h+rdNJIKDCWG39rJtofVgQYpNfeL0buMulj4Ml9A=";
                 var dc = new DeviceClientHandler("cabb9896-0fba-47d2-b67d-0279a9745284", "SmartFan", "Fan", connectionString);
 
                 await dc.DisconnectAsync(connectionString);

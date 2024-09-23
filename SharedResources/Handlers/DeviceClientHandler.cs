@@ -8,6 +8,7 @@ namespace SharedResources.Handlers
 {
     public class DeviceClientHandler
     {
+
         public SmartDeviceModel Settings { get; private set; } = new();
         private DeviceClient? _client;
 
@@ -103,7 +104,9 @@ namespace SharedResources.Handlers
 
             var result = await UpdateDeviceTwinDeviceStateAsync();
             if (result.Succeeded)
+            {
                 return GenerateMethodResponse("Device has successfully started.", 200);
+            }
             else
                 return GenerateMethodResponse($"{result.Message}", 400);
         }
@@ -114,7 +117,9 @@ namespace SharedResources.Handlers
 
             var result = await UpdateDeviceTwinDeviceStateAsync();
             if (result.Succeeded)
+            {
                 return GenerateMethodResponse("Device has stopped.", 200);
+            }
             else
                 return GenerateMethodResponse($"{result.Message}", 400);
         }
@@ -237,7 +242,7 @@ namespace SharedResources.Handlers
             return response;
         }
 
-        public void ConnectionStatusChangeHandler(ConnectionStatus status, ConnectionStatusChangeReason reson)
+        public void ConnectionStatusChangeHandler(ConnectionStatus status, ConnectionStatusChangeReason reason)
         {
             if (status == ConnectionStatus.Disconnected || status == ConnectionStatus.Disabled)
             {

@@ -17,8 +17,7 @@ namespace SmartFan.Views
             UpdateAnimationAsync().ConfigureAwait(false); 
         }
 
-        private bool IsActive = false;
-        public DeviceTwinHandler _twinHandler = new(ConfigurationManager.AppSettings["FanConnectionString"]!);
+        public DeviceTwinHandler _twinHandler = new("HostName=gurra-iothub.azure-devices.net;DeviceId=cabb9896-0fba-47d2-b67d-0279a9745284;SharedAccessKey=ZY2h+rdNJIKDCWG39rJtofVgQYpNfeL0buMulj4Ml9A=");
 
         private async Task InitializeTwinHandlerAsync()
         {
@@ -51,37 +50,25 @@ namespace SmartFan.Views
                 bool deviceState = twin.Properties.Reported["deviceState"];
                 if (deviceState)
                 {
-                    StopDeviceAnimation();
+                    StartDeviceAnimation();
                 }
                 else
                 {
-                    StartDeviceAnimation();
+                    StopDeviceAnimation();
                 }
             }
         }
 
         public void StartDeviceAnimation()
         {
-            if (!IsActive)
-            {
                 var storyBoard = (BeginStoryboard)TryFindResource("rotate-sb");
-                IsActive = true;
                 storyBoard.Storyboard.Begin();
-            }
         }
 
         public void StopDeviceAnimation()
         {
-            if (IsActive)
-            {
                 var storyBoard = (BeginStoryboard)TryFindResource("rotate-sb");
-                IsActive = false;
                 storyBoard.Storyboard.Stop();
-            }
         }
-
-
-
-
     }
 }
