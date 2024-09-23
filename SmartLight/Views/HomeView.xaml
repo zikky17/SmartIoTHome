@@ -53,6 +53,7 @@
 
         <StackPanel Grid.Row="2" HorizontalAlignment="Center" VerticalAlignment="Center" Margin="40 50 0 50">
             <TextBlock FontFamily="{StaticResource poppins-thin}" Text="LIGHT UNIT" FontSize="46" Foreground="White" HorizontalAlignment="Center"></TextBlock>
+            <Border Background="Black" Height="1" HorizontalAlignment="Stretch" Margin="0,10,0,10"/>
             <TextBlock FontFamily="{StaticResource poppins-light}" Text="SMART HOME" FontSize="18" Foreground="White" HorizontalAlignment="Center"></TextBlock>
         </StackPanel>
 
@@ -63,7 +64,7 @@
                     HorizontalAlignment="Center"
                     VerticalAlignment="Center"
                     CornerRadius="30"
-                    Background="SlateGray"
+                    Background="Black"
                     RenderTransformOrigin="0.5 0.5">
                 <Border.Effect>
                     <DropShadowEffect x:Name="ShadowEffect" Color="Black" BlurRadius="20" ShadowDepth="15" />
@@ -73,10 +74,10 @@
             <TextBlock Text="&#xf0eb;" 
                        x:Name="Light"
                        FontSize="150"
-                       FontFamily="{StaticResource fa-solid}"
+                       FontFamily="{StaticResource fa-regular}"
                        HorizontalAlignment="Center"
                        VerticalAlignment="Center"
-                       Foreground="White"
+                       Foreground="GhostWhite"
                        RenderTransformOrigin="0.5 0.5" />
         </Grid>
 

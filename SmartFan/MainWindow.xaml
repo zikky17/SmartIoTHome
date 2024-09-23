@@ -12,9 +12,7 @@
         Background="Transparent"
         AllowsTransparency="True">
 
-
-
-
+   
     <Border Background="SlateGray" CornerRadius="30">
 
         <Grid>
