@@ -42,14 +42,27 @@
 
         <StackPanel Grid.Row="2" HorizontalAlignment="Center" Margin="20 50 20 50">
             <TextBlock Text="FAN UNIT" FontSize="46" Foreground="White" HorizontalAlignment="Center" FontFamily="{StaticResource poppins-thin}"></TextBlock>
+            <Border Background="Black" Height="1" HorizontalAlignment="Stretch" Margin="0,10,0,10"/>
             <TextBlock Text="SMART HOME" FontSize="18" Foreground="White" HorizontalAlignment="Center" FontFamily="{StaticResource poppins-regular}"></TextBlock>
         </StackPanel>
 
         <Grid Grid.Row="3">
+            <Border x:Name="ShadowBorder"
+         Width="200"
+         Height="200"    
+         HorizontalAlignment="Center"
+         VerticalAlignment="Center"
+         CornerRadius="30"
+         Background="Black"
+         RenderTransformOrigin="0.5 0.5">
+                <Border.Effect>
+                    <DropShadowEffect x:Name="ShadowEffect" Color="Black" BlurRadius="20" ShadowDepth="15" />
+                </Border.Effect>
+            </Border>
             <TextBlock Text="&#xf863;" 
                        FontFamily="{StaticResource fa-solid}" 
                        FontSize="150"
-                       Margin="0 0 0 150"
+                       Margin="0 0 0 0"
                        HorizontalAlignment="Center"
                        VerticalAlignment="Center"
                        RenderTransformOrigin="0.5 0.5"
@@ -59,20 +72,6 @@
                 </TextBlock.RenderTransform>
             </TextBlock>
         </Grid>
-
-        <Button 
-        Grid.Row="5" 
-        Margin="40 0 0 40" 
-        Style="{StaticResource btn}"
-        Width="auto"
-        Content="&#xf013;"
-        FontFamily="{StaticResource fa-solid}" 
-        HorizontalAlignment="Right"
-        FontSize="28"
-        Command="{Binding GoToSettingsCommand}"
-        x:Name="Settings" >
-        </Button>
-
     </Grid>
 </UserControl>
 

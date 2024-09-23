@@ -2,8 +2,11 @@
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 using SharedResources.Handlers;
+using SharedResources.Models;
 using SmartFan.ViewModels;
 using SmartFan.Views;
+using System.Configuration;
+using System.Diagnostics;
 using System.Windows;
 
 namespace SmartFan
@@ -38,25 +41,35 @@ namespace SmartFan
             using var cts = new CancellationTokenSource();
             try
             {
-                InitializeDevice();
+                var initializeResult = InitializeDevice();
+                if (!initializeResult.Succeeded)
+                {
+                    Debug.WriteLine($"Device initialization failed: {initializeResult.Message}");
+                }
+
                 await host!.RunAsync(cts.Token);
             }
-            catch { }
-
-            await host!.RunAsync();
+            catch (Exception ex)
+            {
+                Debug.WriteLine($"Error during startup: {ex.Message}");
+            }
         }
 
-        private void InitializeDevice()
+        private ResultResponse InitializeDevice()
         {
-            var connectionString = "HostName=gurra-iothub.azure-devices.net;DeviceId=cabb9896-0fba-47d2-b67d-0279a9745284;SharedAccessKey=ZY2h+rdNJIKDCWG39rJtofVgQYpNfeL0buMulj4Ml9A=";
+            var connectionString = ConfigurationManager.AppSettings["FanConnectionString"]!;
             var dc = new DeviceClientHandler("cabb9896-0fba-47d2-b67d-0279a9745284", "SmartFan", "Fan", connectionString);
 
-            var initalizeResult = dc.Initialize();
-
-            dc.Settings.DeviceStateChanged += (deviceState) =>
+            var initializeResult = dc.Initialize();
+            if (initializeResult.Succeeded)
             {
-                _logger.LogInformation($"{deviceState}");
-            };
+                dc.Settings.DeviceStateChanged += (deviceState) =>
+                {
+                    Debug.WriteLine($"{deviceState}");
+                };
+            }
+
+            return initializeResult;
         }
     }
 }

@@ -55,7 +55,7 @@ namespace SharedResources.Handlers
         }
 
 
-        public async Task<ResultResponse> Disconnect(string connectionString)
+        public async Task<ResultResponse> DisconnectAsync(string connectionString)
         {
             var response = new ResultResponse();
 

@@ -1,18 +1,8 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.Windows;
+﻿using Microsoft.Azure.Devices.Shared;
+using SharedResources.Handlers;
+using System.Configuration;
 using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
-using System.Windows.Input;
-using System.Windows.Media;
 using System.Windows.Media.Animation;
-using System.Windows.Media.Imaging;
-using System.Windows.Navigation;
-using System.Windows.Shapes;
 
 namespace SmartFan.Views
 {
@@ -24,9 +14,51 @@ namespace SmartFan.Views
         public HomeView()
         {
             InitializeComponent();
+            UpdateAnimationAsync().ConfigureAwait(false); 
         }
 
         private bool IsActive = false;
+        public DeviceTwinHandler _twinHandler = new(ConfigurationManager.AppSettings["FanConnectionString"]!);
+
+        private async Task InitializeTwinHandlerAsync()
+        {
+            await _twinHandler.SetDesiredPropertyUpdateCallbackAsync(OnDesiredPropertyChanged);
+
+            await UpdateAnimationAsync();
+        }
+
+        private async Task OnDesiredPropertyChanged(TwinCollection desiredProperties, object userContext)
+        {
+            if (desiredProperties.Contains("deviceState"))
+            {
+                bool deviceState = desiredProperties["deviceState"];
+                if (deviceState)
+                {
+                    StartDeviceAnimation();                   
+                }
+                else
+                {
+                    StopDeviceAnimation();
+                }
+            }
+        }
+
+        public async Task UpdateAnimationAsync()
+        {
+            var twin = await _twinHandler.GetDeviceTwinAsync();
+            if (twin != null && twin.Properties.Reported.Contains("deviceState"))
+            {
+                bool deviceState = twin.Properties.Reported["deviceState"];
+                if (deviceState)
+                {
+                    StopDeviceAnimation();
+                }
+                else
+                {
+                    StartDeviceAnimation();
+                }
+            }
+        }
 
         public void StartDeviceAnimation()
         {
@@ -35,7 +67,6 @@ namespace SmartFan.Views
                 var storyBoard = (BeginStoryboard)TryFindResource("rotate-sb");
                 IsActive = true;
                 storyBoard.Storyboard.Begin();
-                Console.WriteLine("Animation started");
             }
         }
 
@@ -46,7 +77,6 @@ namespace SmartFan.Views
                 var storyBoard = (BeginStoryboard)TryFindResource("rotate-sb");
                 IsActive = false;
                 storyBoard.Storyboard.Stop();
-                Console.WriteLine("Animation stopped");
             }
         }
 
