@@ -55,20 +55,23 @@ namespace SharedResources.Handlers
         }
 
 
-        public ResultResponse Disconnect()
+        public async Task<ResultResponse> Disconnect(string connectionString)
         {
             var response = new ResultResponse();
 
+            Settings.ConnectionString = connectionString;
+
+            _client = DeviceClient.CreateFromConnectionString(Settings.ConnectionString.ToString());
+
             try
             {
-                Settings.ConnectionState = false;
                 Settings.DeviceState = false;
-                Task.Run(UpdateDeviceTwinDeviceStateAsync);
+                Settings.ConnectionState = false;
                 UpdateDeviceTwinConnectionStateAsync(false).Wait();
+                await UpdateDeviceTwinDeviceStateAsync();
 
                 response.Succeeded = true;
                 response.Message = "Device disconnected.";
-
 
             }
             catch (Exception ex)
@@ -111,7 +114,7 @@ namespace SharedResources.Handlers
 
             var result = await UpdateDeviceTwinDeviceStateAsync();
             if (result.Succeeded)
-                return GenerateMethodResponse("Device has successfully stopped.", 200);
+                return GenerateMethodResponse("Device has stopped.", 200);
             else
                 return GenerateMethodResponse($"{result.Message}", 400);
         }
@@ -160,6 +163,7 @@ namespace SharedResources.Handlers
                 response.Succeeded = false;
                 response.Message = ex.Message;
             }
+
             return response;
         }
 
@@ -174,7 +178,7 @@ namespace SharedResources.Handlers
             {
                 var reportedProperties = new TwinCollection
                 {
-                    ["connectionState"] = true,
+                    ["connectionState"] = Settings.ConnectionState,
                     ["deviceName"] = Settings.DeviceName,
                     ["deviceType"] = Settings.DeviceType,
                     ["deviceState"] = Settings.DeviceState
@@ -233,7 +237,7 @@ namespace SharedResources.Handlers
             return response;
         }
 
-        public void ConnectionStatusChangeHandler(ConnectionStatus status, ConnectionStatusChangeReason reason)
+        public void ConnectionStatusChangeHandler(ConnectionStatus status, ConnectionStatusChangeReason reson)
         {
             if (status == ConnectionStatus.Disconnected || status == ConnectionStatus.Disabled)
             {

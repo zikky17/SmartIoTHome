@@ -1,5 +1,6 @@
 ﻿using SharedResources.Handlers;
 using SmartLight.ViewModels;
+using System.Diagnostics;
 using System.Text;
 using System.Windows;
 using System.Windows.Controls;
@@ -26,14 +27,15 @@ namespace SmartLight
 
         private void ExitButton_Click(object sender, RoutedEventArgs e)
         {
-            AppDomain.CurrentDomain.ProcessExit += (s, e) =>
+            AppDomain.CurrentDomain.ProcessExit += async (s, e) =>
             {
                 var connectionString = "HostName=gurra-iothub.azure-devices.net;DeviceId=f0468151-3b8b-4d92-8e42-cf679a27796f;SharedAccessKey=6ycjkPeWyIRubkKcKX9BjTmOuZn0mBr6tAIoTN5ynLI=";
                 var dc = new DeviceClientHandler("f0468151-3b8b-4d92-8e42-cf679a27796f", "SmartLight", "Light", connectionString);
-                var disconnectResult = dc.Disconnect();
+
+                await dc.Disconnect(connectionString);
             };
 
-            Environment.Exit(0);
+            Application.Current.Shutdown();
         }
 
         private void TopWindowBar_MouseLeftButtonDown(object sender, MouseButtonEventArgs e)
