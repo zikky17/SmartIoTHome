@@ -1,0 +1,62 @@
+﻿<UserControl x:Class="SmartTemperature.Views.HomeView"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:local="clr-namespace:SmartTemperature.Views"
+             mc:Ignorable="d" 
+             xmlns:viewmodels="clr-namespace:SmartTemperature.ViewModels"
+             d:DataContext="{d:DesignInstance Type=viewmodels:HomeVM}"
+             d:DesignHeight="700" d:DesignWidth="400">
+    
+    
+    <Grid>
+
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="200*"/>
+            <ColumnDefinition Width="15*"/>
+        </Grid.ColumnDefinitions>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="auto" />
+            <RowDefinition Height="auto" />
+            <RowDefinition Height="auto" />
+            <RowDefinition Height="*" />
+            <RowDefinition Height="auto" />
+            <RowDefinition Height="auto" />
+        </Grid.RowDefinitions>
+
+
+        <StackPanel Grid.Row="2" HorizontalAlignment="Center" Margin="20 50 20 50">
+            <TextBlock Text="TEMP UNIT" FontSize="46" Foreground="White" HorizontalAlignment="Center" FontFamily="{StaticResource poppins-thin}"></TextBlock>
+            <Border Background="Black" Height="1" HorizontalAlignment="Stretch" Margin="0,10,0,10"/>
+            <TextBlock Text="SMART HOME" FontSize="18" Foreground="White" HorizontalAlignment="Center" FontFamily="{StaticResource poppins-regular}"></TextBlock>
+        </StackPanel>
+
+        <Grid Grid.Row="3">
+            <Border x:Name="ShadowBorder"
+       Width="200"
+       Height="200"    
+       HorizontalAlignment="Center"
+       VerticalAlignment="Center"
+       CornerRadius="30"
+       Background="Black"
+       RenderTransformOrigin="0.5 0.5">
+                <Border.Effect>
+                    <DropShadowEffect x:Name="ShadowEffect" Color="Black" BlurRadius="20" ShadowDepth="15" />
+                </Border.Effect>
+            </Border>
+            <TextBlock Text="&#xf2c7;" 
+                     FontFamily="{StaticResource fa-solid}" 
+                     FontSize="150"
+                     Margin="0 0 0 0"
+                     HorizontalAlignment="Center"
+                     VerticalAlignment="Center"
+                     RenderTransformOrigin="0.5 0.5"
+                     Foreground="White">
+                <TextBlock.RenderTransform>
+                    <RotateTransform x:Name="Rotating" Angle="0" />
+                </TextBlock.RenderTransform>
+            </TextBlock>
+        </Grid>
+    </Grid>
+</UserControl>

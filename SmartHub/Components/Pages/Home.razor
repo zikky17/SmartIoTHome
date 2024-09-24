@@ -15,7 +15,8 @@
                 <div class="container">
                     <div id="@device!.DeviceId" class="device @(device.DeviceState ? "active" : null)">
                         <div class="body device-container">
-                            <i class="@GetIconClass(device.DeviceType) @GetIconCssClass(device.DeviceType)"></i>
+                            <i class="@GetIconClass(device.DeviceType!) @GetDeviceCssClass(device) 
+                                    @(device.DeviceState && device.DeviceType.ToLower() == "fan" ? " spin" : "")"></i>
                             <div class="device-name">@device.DeviceName</div>
                             <div class="state">@(device.ConnectionState ? "Connected" : "Disconnected")</div>
                             <div class="device-state">@(device.DeviceState ? "On" : "Off")</div>
@@ -60,17 +61,29 @@
 
     private string GetIconClass(string deviceType)
     {
-        return (string)iconConverter.Convert(deviceType, typeof(string), null, CultureInfo.InvariantCulture);
+        return (string)iconConverter.Convert(deviceType!, typeof(string), null, CultureInfo.InvariantCulture);
     }
 
-    private string GetIconCssClass(string deviceType)
+    private string GetDeviceCssClass(SmartDeviceModel device)
     {
-        return deviceType.ToLower() switch
+        var cssClass = device.DeviceType.ToLower() switch
         {
             "light" => "icon-light",
             "fan" => "icon-fan",
             "temp" => "icon-temp",
             _ => "icon-default"
         };
+
+        if (device.DeviceState)
+        {
+            cssClass += device.DeviceType.ToLower() switch
+            {
+                "fan" => " spin",
+                "light" => " pulse",
+                _ => ""
+            };
+        }
+
+        return cssClass;
     }
 }
