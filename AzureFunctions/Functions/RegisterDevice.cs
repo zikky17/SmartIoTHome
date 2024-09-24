@@ -4,6 +4,7 @@ using Microsoft.Azure.Functions.Worker;
 using Microsoft.Extensions.Logging;
 using Newtonsoft.Json;
 using SharedResources.Handlers;
+using SharedResources.Managers;
 using SharedResources.Models;
 
 namespace AzureFunctions.Functions
@@ -11,9 +12,9 @@ namespace AzureFunctions.Functions
     public class RegisterDevice
     {
         private readonly ILogger<RegisterDevice> _logger;
-        private readonly AzureHub _hub;
+        private readonly IoTHubManager _hub;
 
-        public RegisterDevice(ILogger<RegisterDevice> logger, AzureHub hub)
+        public RegisterDevice(ILogger<RegisterDevice> logger, IoTHubManager hub)
         {
             _logger = logger;
             _hub = hub;

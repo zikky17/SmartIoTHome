@@ -29,6 +29,9 @@ namespace SmartHub
             builder.Services.AddTransient<AzureHub>();
             builder.Services.AddTransient<SettingsVM>();
             builder.Services.AddTransient<Settings>();
+            builder.Services.AddTransient<NewDeviceVM>();
+
+            builder.Services.AddScoped(sp => new HttpClient());
 
             return builder.Build();
         }

@@ -12,31 +12,31 @@
         {
             foreach (var device in Devices)
             {
-                        <div class="container">
-                            <div id="@device!.DeviceId" class="device @(device.DeviceState ? "active" : null)">
-                                <div class="body device-container">
-                                            <i class="@GetIconClass(device.DeviceType) @GetIconCssClass(device.DeviceType)"></i>
-                                    <div class="device-name">@device.DeviceName</div>
-                                    <div class="state">@(device.ConnectionState ? "Connected" : "Not Connected")</div>
-                                    <div class="device-state">@(device.DeviceState ? "Activated" : "Not Activated")</div>
-                                </div>
-                                <footer>
-                                    <label class="switch">
-                                        <InputCheckbox @bind-Value="device.DeviceState" 
-                                                       @onclick="() => viewModel.OnDeviceStateChanged(device)" 
-                                                       disabled="@(device.ConnectionState == false)" />
-                                        <span class="slider round"></span>
-                                    </label>
-                                </footer>
-                            </div>
+                <div class="container">
+                    <div id="@device!.DeviceId" class="device @(device.DeviceState ? "active" : null)">
+                        <div class="body device-container">
+                            <i class="@GetIconClass(device.DeviceType) @GetIconCssClass(device.DeviceType)"></i>
+                            <div class="device-name">@device.DeviceName</div>
+                            <div class="state">@(device.ConnectionState ? "Connected" : "Disconnected")</div>
+                            <div class="device-state">@(device.DeviceState ? "On" : "Off")</div>
                         </div>
+                        <footer>
+                            <label class="switch">
+                                <InputCheckbox @bind-Value="device.DeviceState"
+                                               @onclick="() => viewModel.OnDeviceStateChanged(device)"
+                                               disabled="@(device.ConnectionState == false)" />
+                                <span class="slider round"></span>
+                            </label>
+                        </footer>
+                    </div>
+                </div>
             }
         }
         else
         {
-                <div class="preloader">
-                    <i class="fa-solid fa-spinner-third fa-spin"></i>
-                </div>
+            <div class="preloader">
+                <i class="fa-solid fa-spinner-third fa-spin"></i>
+            </div>
         }
     </div>
 </div>
@@ -58,10 +58,10 @@
 
     private DeviceTypeConverter iconConverter = new DeviceTypeConverter();
 
-private string GetIconClass(string deviceType)
-{
+    private string GetIconClass(string deviceType)
+    {
         return (string)iconConverter.Convert(deviceType, typeof(string), null, CultureInfo.InvariantCulture);
-}
+    }
 
     private string GetIconCssClass(string deviceType)
     {

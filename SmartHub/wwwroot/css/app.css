@@ -8,7 +8,7 @@
     --color-text: #6B7280;
     --color-headline: #111827;
     --color-border-gray: #D1D5DB;
-    --container-padding: 1rem;
+    --container-padding: 1 rem;
 }
 
 * {
@@ -49,7 +49,6 @@ h1:focus {
     padding-right: var(--container-padding);
     margin-left: auto;
     margin-right: auto;
-    border: none;
 }
 
 nav {
@@ -129,18 +128,18 @@ nav {
         text-align: center;
         padding-top: 0.8rem;
         padding-bottom: 0.8rem;
-        background-color: #2b2b2b;
+        background-color: #101211;
     }
 
     .device.active {
-        background: rgb(65,83,90);
+        background: #101211;
         background: linear-gradient(0deg, rgba(65,83,90,1) 0%, rgba(119,149,157,0.9) 67%, rgba(179,227,236,0.8) 100%);
         transition: all 0.4s ease-in-out;
         color: #ffffff;
     }
 
         .device.active footer {
-            background-color: #2b2b2b;
+            background-color: #101211;
         }
 
 .switch {
@@ -231,3 +230,42 @@ nav {
 .not-connected {
     color: red;
 }
+
+.new-device-container {
+    display: grid;
+    gap: 20px;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+}
+
+input {
+    width: 75%;
+}
+
+.button-box {
+    width: 50%;
+}
+
+.reg-btn {
+    background-color: #4CAF50; 
+    border: none;
+    color: white; 
+    padding: 15px 32px;
+    text-align: center; 
+    text-decoration: none;
+    display: inline-block;
+    font-size: 16px; 
+    margin-left: 140px;
+    cursor: pointer; 
+    border-radius: 8px; 
+    transition: background-color 0.3s ease;
+}
+
+    .reg-btn:hover {
+        background-color: #45a049;
+    }
+
+    .reg-btn:active {
+        background-color: #3e8e41; 
+    }
