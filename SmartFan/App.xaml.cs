@@ -18,6 +18,7 @@ namespace SmartFan
     {
         private static IHost? host;
         private readonly ILogger _logger;
+        private readonly AzureHub _hub;
 
         public App()
         {
@@ -57,7 +58,7 @@ namespace SmartFan
 
         private ResultResponse InitializeDevice()
         {
-            var connectionString = "HostName=gurra-iothub.azure-devices.net;DeviceId=cabb9896-0fba-47d2-b67d-0279a9745284;SharedAccessKey=ZY2h+rdNJIKDCWG39rJtofVgQYpNfeL0buMulj4Ml9A=";
+            var connectionString = _hub.GetDeviceConnectionString();
             var dc = new DeviceClientHandler("cabb9896-0fba-47d2-b67d-0279a9745284", "SmartFan", "Fan", connectionString);
 
             var initializeResult = dc.Initialize();
