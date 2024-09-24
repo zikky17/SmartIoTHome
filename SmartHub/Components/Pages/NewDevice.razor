@@ -42,7 +42,7 @@
             return;
         }
 
-        var response = await Http.PostAsJsonAsync("http://localhost:7069/api/DeviceRegistration", viewModel.RegistrationRequest);
+        var response = await Http.PostAsJsonAsync("https://azurefunctions20240924121104.azurewebsites.net/api/DeviceRegistration?code=jpY81b3DaKeobBk8s7zmXwYOmEBxCBqEt_Cl2Z0L9fkHAzFu23X0Dg%3D%3D", viewModel.RegistrationRequest);
 
         if (response.IsSuccessStatusCode)
         {
