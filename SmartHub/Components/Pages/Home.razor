@@ -74,12 +74,15 @@
             _ => "icon-default"
         };
 
+        cssClass += " no-background";
+
         if (device.DeviceState)
         {
             cssClass += device.DeviceType.ToLower() switch
             {
                 "fan" => " spin",
                 "light" => " pulse",
+                "temp" => " temp-pulse",
                 _ => ""
             };
         }

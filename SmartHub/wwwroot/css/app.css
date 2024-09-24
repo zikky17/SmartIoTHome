@@ -287,18 +287,18 @@ input {
 
 @keyframes pulse {
     0% {
-        opacity: 0.8;
-        box-shadow: 0 0 10px rgba(255, 223, 0, 0.7), 0 0 20px rgba(255, 223, 0, 0.5);
+        opacity: 0.5;
+        color: rgba(255, 223, 0, 0.7), rgba(255, 223, 0, 0.5);
     }
 
     50% {
         opacity: 1;
-        box-shadow: 0 0 20px rgba(255, 223, 0, 0.9), 0 0 30px rgba(255, 223, 0, 0.7);
+        color: rgba(255, 223, 0, 0.9), rgba(255, 223, 0, 0.7);
     }
 
     100% {
-        opacity: 0.8;
-        box-shadow: 0 0 10px rgba(255, 223, 0, 0.7), 0 0 20px rgba(255, 223, 0, 0.5);
+        opacity: 0.5;
+        color: rgba(255, 223, 0, 0.7), rgba(255, 223, 0, 0.5);
     }
 }
 
@@ -307,3 +307,60 @@ input {
     animation: pulse 1.5s infinite ease-in-out;
     color: #ffdf00;
 }
+
+@keyframes tempPulse {
+    0% {
+        color: #0e5ce3;
+    }
+
+    10% {
+        color: #2b6de0;
+    }
+
+    20% {
+        color: #3e78de;
+    }
+
+    30% {
+        color: #5b8ade;
+    }
+
+    40% {
+        color: #81a2de;
+    }
+
+    50% {
+        color: #a88c8c;
+    }
+
+    60% {
+        color: #a67979;
+    }
+
+    70% {
+        color: #a36565;
+    }
+
+    80% {
+        color: #a15050;
+    }
+
+    90% {
+        color: #a12f2f;
+    }
+
+    100% {
+        color: #a80000;
+    }
+}
+
+.temp-pulse {
+    animation: tempPulse 2s infinite ease-in-out; 
+}
+
+.no-background {
+    background-color: transparent !important;
+    border: none !important; 
+    box-shadow: unset !important;
+}
+
