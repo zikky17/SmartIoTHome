@@ -1,4 +1,5 @@
-﻿using Microsoft.Azure.Devices.Client;
+﻿using Microsoft.Azure.Devices;
+using Microsoft.Azure.Devices.Client;
 using Microsoft.Azure.Devices.Shared;
 using Newtonsoft.Json;
 using SharedResources.Models;
@@ -20,7 +21,7 @@ namespace SharedResources.Handlers
             Settings.ConnectionString = connectionString;
         }
 
-        public ResultResponse Initialize()
+        public async Task<ResultResponse> Initialize()
         {
             var response = new ResultResponse();
 
@@ -32,7 +33,7 @@ namespace SharedResources.Handlers
                 {
                     _client.SetConnectionStatusChangesHandler(ConnectionStatusChangeHandler);
 
-                    Task.WhenAll(
+                    await Task.WhenAll(
                         _client.SetMethodDefaultHandlerAsync(DirectMethodDefaultCallback, null),
                         UpdateDeviceTwinPropertiesAsync()
                     );
@@ -171,8 +172,6 @@ namespace SharedResources.Handlers
 
             return response;
         }
-
-
 
 
         public async Task<ResultResponse> UpdateDeviceTwinPropertiesAsync()

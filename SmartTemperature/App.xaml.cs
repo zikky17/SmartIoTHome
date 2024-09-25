@@ -42,7 +42,10 @@ namespace SmartTemperature
             using var cts = new CancellationTokenSource();
             try
             {
-                var initializeResult = InitializeDevice();
+                var connectionString = "HostName=gurra-iothub.azure-devices.net;DeviceId=798197a0-e07f-453c-92c5-9a2121a2d673;SharedAccessKey=KaJ+2FmYJPW2L2OVn84wX5fSC3hgVHCbfAIoTFAUVuA=";
+                var dc = new DeviceClientHandler("798197a0-e07f-453c-92c5-9a2121a2d673", "SmartTemp", "Temp", connectionString);
+
+                var initializeResult = await dc.Initialize();
                 if (!initializeResult.Succeeded)
                 {
                     Debug.WriteLine($"Device initialization failed: {initializeResult.Message}");
@@ -55,23 +58,5 @@ namespace SmartTemperature
                 Debug.WriteLine($"Error during startup: {ex.Message}");
             }
         }
-
-        private ResultResponse InitializeDevice()
-        {
-            var connectionString = "HostName=gurra-iothub.azure-devices.net;DeviceId=798197a0-e07f-453c-92c5-9a2121a2d673;SharedAccessKey=KaJ+2FmYJPW2L2OVn84wX5fSC3hgVHCbfAIoTFAUVuA=";
-            var dc = new DeviceClientHandler("798197a0-e07f-453c-92c5-9a2121a2d673", "SmartTemp", "Temp", connectionString);
-
-            var initializeResult = dc.Initialize();
-            if (initializeResult.Succeeded)
-            {
-                dc.Settings.DeviceStateChanged += (deviceState) =>
-                {
-                    Debug.WriteLine($"{deviceState}");
-                };
-            }
-
-            return initializeResult;
-        }
     }
-
 }

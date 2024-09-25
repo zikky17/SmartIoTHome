@@ -2,16 +2,10 @@
 using SharedResources.Factories;
 using SharedResources.Models;
 using SQLite;
-using SQLitePCL;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace SharedResources.Data
 {
-    internal class SQLiteContext
+    public class SQLiteContext : IDatabaseContext
     {
         private readonly ILogger<SQLiteContext> _logger;
         private readonly SQLiteAsyncConnection? _context;

@@ -1,6 +1,7 @@
 ﻿using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
+using SharedResources.Data;
 using SharedResources.Handlers;
 using SharedResources.Managers;
 using SharedResources.Models;
@@ -31,6 +32,11 @@ namespace SmartFan
                 services.AddSingleton<HomeView>();
                 services.AddSingleton<HomeVM>();
 
+                services.AddSingleton<IDatabaseContext>(sp =>
+                {
+                    var logger = sp.GetRequiredService<ILogger<SQLiteContext>>();
+                    return new SQLiteContext(logger, () => Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData));
+                });
             }).Build();
 
         }
@@ -43,7 +49,10 @@ namespace SmartFan
             using var cts = new CancellationTokenSource();
             try
             {
-                var initializeResult = InitializeDevice();
+                var connectionString = "HostName=gurra-iothub.azure-devices.net;DeviceId=cabb9896-0fba-47d2-b67d-0279a9745284;SharedAccessKey=ZY2h+rdNJIKDCWG39rJtofVgQYpNfeL0buMulj4Ml9A=";
+                var dc = new DeviceClientHandler("cabb9896-0fba-47d2-b67d-0279a9745284", "SmartFan", "Fan", connectionString);
+
+                var initializeResult = await dc.Initialize();
                 if (!initializeResult.Succeeded)
                 {
                     Debug.WriteLine($"Device initialization failed: {initializeResult.Message}");
@@ -55,23 +64,6 @@ namespace SmartFan
             {
                 Debug.WriteLine($"Error during startup: {ex.Message}");
             }
-        }
-
-        private ResultResponse InitializeDevice()
-        {
-            var connectionString = "HostName=gurra-iothub.azure-devices.net;DeviceId=cabb9896-0fba-47d2-b67d-0279a9745284;SharedAccessKey=ZY2h+rdNJIKDCWG39rJtofVgQYpNfeL0buMulj4Ml9A=";
-            var dc = new DeviceClientHandler("cabb9896-0fba-47d2-b67d-0279a9745284", "SmartFan", "Fan", connectionString);
-
-            var initializeResult = dc.Initialize();
-            if (initializeResult.Succeeded)
-            {
-                dc.Settings.DeviceStateChanged += (deviceState) =>
-                {
-                    Debug.WriteLine($"{deviceState}");
-                };
-            }
-
-            return initializeResult;
         }
     }
 }
