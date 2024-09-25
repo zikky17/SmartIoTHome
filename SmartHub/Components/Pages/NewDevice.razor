@@ -1,0 +1,62 @@
+﻿@page "/newDevice"
+@using SharedResources.Managers
+@using SharedResources.Models
+@using SmartHub.ViewModels
+@inject HttpClient Http
+@inject NewDeviceVM viewModel
+
+
+<div class="new-device-container">
+
+    <h3 style="text-align:center;">Create New Device</h3>
+    <div>
+        <label for="deviceName">Device Name:</label>
+        <input id="deviceName" @bind="viewModel.RegistrationRequest.DeviceName" />
+    </div>
+    <div>
+        <label for="deviceId">Device Type:</label>
+        <input id="deviceType" @bind="viewModel.RegistrationRequest!.DeviceType" />
+    </div>
+  
+    <div class="button-box">
+        <button class="reg-btn" @onclick="RegisterDevice">Register Device</button>
+    </div>
+
+
+    @if (!string.IsNullOrEmpty(responseMessage))
+    {
+        <p>@responseMessage</p>
+    }
+</div>
+
+@code {
+
+    private string? responseMessage;
+
+    private async Task RegisterDevice()
+    {
+
+        if (string.IsNullOrEmpty(viewModel.RegistrationRequest?.DeviceType) ||
+            string.IsNullOrEmpty(viewModel.RegistrationRequest.DeviceName))
+        {
+            responseMessage = "Device Name and Device Type are required.";
+            return;
+        }
+
+        var hubManager = new IoTHubManager("HostName=gurra-iothub.azure-devices.net;SharedAccessKeyName=iothubowner;SharedAccessKey=/6xdlTOp1WhRRbgMsWuAS+FCnQSBLRI9BAIoTAU4LdE=");
+
+        var registeredDevice = await hubManager.RegisterDeviceAsync(viewModel.RegistrationRequest.DeviceId, viewModel.RegistrationRequest.DeviceName);
+
+        var response = await Http.PostAsJsonAsync("https://azurefunctions20240924121104.azurewebsites.net/api/DeviceRegistration?code=jpY81b3DaKeobBk8s7zmXwYOmEBxCBqEt_Cl2Z0L9fkHAzFu23X0Dg%3D%3D", viewModel.RegistrationRequest);
+
+        if (response.IsSuccessStatusCode)
+        {
+            var registrationResponse = await response.Content.ReadFromJsonAsync<DeviceRegistrationResponse>();
+            responseMessage = $"Device registered with the name: {registrationResponse!.DeviceName}";
+        }
+        else
+        {
+            responseMessage = "Failed to register device.";
+        }
+    }
+}

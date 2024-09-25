@@ -1,43 +1,31 @@
 ﻿@page "/"
+@using Microsoft.Maui.Controls.Platform
+@using SmartHub.Converters
 @using SmartHub.ViewModels
 @using SharedResources.Models
+@using System.Globalization
 @inject HomeVM viewModel
 
 <div class="container">
-
     <div class="devices hub-container">
         @if (Devices != null)
         {
             foreach (var device in Devices)
             {
-                var icon = device?.DeviceType?.ToLower() switch
-                {
-                    "light" => "fa-regular fa-lightbulb",
-                    "fan" => "fa-regular fa-fan",
-                    "temp" => "fa-sharp fa-light fa-temperature-high",
-                    _ => "fa-regular fa-microchip"
-
-                };
-
-                var iconClass = device?.DeviceType?.ToLower() switch
-                {
-                    "light" => "icon-light",
-                    "fan" => "icon-fan",
-                    "temp" => "icon-temp",
-                    _ => "icon-default"
-                };
-
-
                 <div class="container">
                     <div id="@device!.DeviceId" class="device @(device.DeviceState ? "active" : null)">
-                        <div class="body">
-                            <i class="@icon @iconClass"></i>
-                            <div class="title">@device.DeviceName</div>
-                            <div class="state">@(device.ConnectionState ? "Connected" : "Connecting...")</div>
+                        <div class="body device-container">
+                            <i class="@GetIconClass(device.DeviceType!) @GetDeviceCssClass(device) 
+                                    @(device.DeviceState && device.DeviceType.ToLower() == "fan" ? " spin" : "")"></i>
+                            <div class="device-name">@device.DeviceName</div>
+                            <div class="state">@(device.ConnectionState ? "Connected" : "Disconnected")</div>
+                            <div class="device-state">@(device.DeviceState ? "On" : "Off")</div>
                         </div>
                         <footer>
                             <label class="switch">
-                                <InputCheckbox @bind-Value="device.DeviceState" @onclick="() => viewModel.OnDeviceStateChanged(device)" disabled="@(device.ConnectionState == false)" />
+                                <InputCheckbox @bind-Value="device.DeviceState"
+                                               @onclick="() => viewModel.OnDeviceStateChanged(device)"
+                                               disabled="@(device.ConnectionState == false)" />
                                 <span class="slider round"></span>
                             </label>
                         </footer>
@@ -55,7 +43,7 @@
 </div>
 
 @code {
-    private IEnumerable<SmartDeviceModel> Devices = [];
+    private IEnumerable<SmartDeviceModel> Devices = Array.Empty<SmartDeviceModel>();
 
     protected override async Task OnInitializedAsync()
     {
@@ -67,5 +55,38 @@
     {
         Devices = await viewModel.GetDevicesAsync();
         await InvokeAsync(StateHasChanged);
+    }
+
+    private DeviceTypeConverter iconConverter = new DeviceTypeConverter();
+
+    private string GetIconClass(string deviceType)
+    {
+        return (string)iconConverter.Convert(deviceType!, typeof(string), null, CultureInfo.InvariantCulture);
+    }
+
+    private string GetDeviceCssClass(SmartDeviceModel device)
+    {
+        var cssClass = device.DeviceType.ToLower() switch
+        {
+            "light" => "icon-light",
+            "fan" => "icon-fan",
+            "temp" => "icon-temp",
+            _ => "icon-default"
+        };
+
+        cssClass += " no-background";
+
+        if (device.DeviceState)
+        {
+            cssClass += device.DeviceType.ToLower() switch
+            {
+                "fan" => " spin",
+                "light" => " pulse",
+                "temp" => " temp-pulse",
+                _ => ""
+            };
+        }
+
+        return cssClass;
     }
 }

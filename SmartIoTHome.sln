@@ -3,17 +3,19 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
 VisualStudioVersion = 17.11.35312.102
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SmartHub", "SmartHub\SmartHub.csproj", "{2F15C683-E28B-4DA4-B025-9F76DBBC3D4A}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SmartHub", "SmartHub\SmartHub.csproj", "{2F15C683-E28B-4DA4-B025-9F76DBBC3D4A}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SharedResources", "SharedResources\SharedResources.csproj", "{8D362799-3ECC-4D72-BB47-F6EB2E0D7CBB}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SharedResources", "SharedResources\SharedResources.csproj", "{8D362799-3ECC-4D72-BB47-F6EB2E0D7CBB}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SharedResourcesWPF", "SharedResourcesWPF\SharedResourcesWPF.csproj", "{2573A89E-681D-4BD7-8280-A37B136FE0F0}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SharedResourcesWPF", "SharedResourcesWPF\SharedResourcesWPF.csproj", "{2573A89E-681D-4BD7-8280-A37B136FE0F0}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SmartFan", "SmartFan\SmartFan.csproj", "{70E0E1AC-39AE-49F1-86D5-A193E0DDF2A1}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SmartFan", "SmartFan\SmartFan.csproj", "{70E0E1AC-39AE-49F1-86D5-A193E0DDF2A1}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SmartLight", "SmartLight\SmartLight.csproj", "{E6AE0D79-A968-425E-9EA4-4C07E27894A7}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SmartLight", "SmartLight\SmartLight.csproj", "{E6AE0D79-A968-425E-9EA4-4C07E27894A7}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SmartTemperature", "SmartTemperature\SmartTemperature.csproj", "{766EE610-5498-4346-A6A2-0DAF3E324E32}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SmartTemperature", "SmartTemperature\SmartTemperature.csproj", "{766EE610-5498-4346-A6A2-0DAF3E324E32}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AzureFunctions", "AzureFunctions\AzureFunctions.csproj", "{8C66B56F-E079-43D1-A5C7-2A1417BDA7D8}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -47,6 +49,10 @@ Global
 		{766EE610-5498-4346-A6A2-0DAF3E324E32}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{766EE610-5498-4346-A6A2-0DAF3E324E32}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{766EE610-5498-4346-A6A2-0DAF3E324E32}.Release|Any CPU.Build.0 = Release|Any CPU
+		{8C66B56F-E079-43D1-A5C7-2A1417BDA7D8}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{8C66B56F-E079-43D1-A5C7-2A1417BDA7D8}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{8C66B56F-E079-43D1-A5C7-2A1417BDA7D8}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{8C66B56F-E079-43D1-A5C7-2A1417BDA7D8}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

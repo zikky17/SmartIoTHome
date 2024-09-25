@@ -1,11 +1,16 @@
-﻿namespace SmartHub
+﻿using SharedResources.Data;
+
+namespace SmartHub
 {
     public partial class App : Application
     {
-        public App()
+        private readonly IDatabaseContext _databaseContext;
+
+
+        public App(IDatabaseContext databaseContext)
         {
             InitializeComponent();
-
+            _databaseContext = databaseContext;
             MainPage = new MainPage();
         }
     }

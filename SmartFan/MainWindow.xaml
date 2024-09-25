@@ -13,10 +13,14 @@
         AllowsTransparency="True">
 
 
-
-
-    <Border Background="SlateGray" CornerRadius="30">
-
+    <Border CornerRadius="30">
+        <Border.Background>
+            <LinearGradientBrush StartPoint="0,0" EndPoint="1,1">
+                <GradientStop Color="Black" Offset="0.0" />
+                <GradientStop Color="DarkGray" Offset="1.0" />
+            </LinearGradientBrush>
+        </Border.Background>
+        
         <Grid>
             <Grid.RowDefinitions>
                 <RowDefinition Height="Auto" />
@@ -24,7 +28,7 @@
             </Grid.RowDefinitions>
 
             <Border CornerRadius="30,30,0,0"
-          Background="SlateGray"
+          Background="Transparent"
           x:Name="TopWindowBar"
           MouseLeftButtonDown="TopWindowBar_MouseLeftButtonDown"
           Height="30"

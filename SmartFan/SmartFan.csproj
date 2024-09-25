@@ -16,6 +16,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\SharedResourcesWPF\SharedResourcesWPF.csproj" />
+    <ProjectReference Include="..\SharedResources\SharedResources.csproj" />
   </ItemGroup>
 
 </Project>

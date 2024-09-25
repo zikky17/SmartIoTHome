@@ -1,6 +1,8 @@
 ﻿using CommunityToolkit.Maui;
 using Microsoft.Extensions.Logging;
+using SharedResources.Data;
 using SharedResources.Handlers;
+using SmartHub.Components.Pages;
 using SmartHub.ViewModels;
 
 namespace SmartHub
@@ -20,12 +22,22 @@ namespace SmartHub
 
             builder.Services.AddMauiBlazorWebView();
 
-#if DEBUG
+            builder.Services.AddSingleton<IDatabaseContext>(sp =>
+            {
+                var logger = sp.GetRequiredService<ILogger<SQLiteContext>>();
+                return new SQLiteContext(logger, () => Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData));
+            });
+
     		builder.Services.AddBlazorWebViewDeveloperTools();
     		builder.Logging.AddDebug();
-#endif
+
             builder.Services.AddTransient<HomeVM>();
             builder.Services.AddTransient<AzureHub>();
+            builder.Services.AddTransient<SettingsVM>();
+            builder.Services.AddTransient<Settings>();
+            builder.Services.AddTransient<NewDeviceVM>();
+
+            builder.Services.AddScoped(sp => new HttpClient());
 
             return builder.Build();
         }

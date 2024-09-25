@@ -1,4 +1,5 @@
-﻿using Microsoft.Azure.Devices.Client;
+﻿using Microsoft.Azure.Devices;
+using Microsoft.Azure.Devices.Client;
 using Microsoft.Azure.Devices.Shared;
 using Newtonsoft.Json;
 using SharedResources.Models;
@@ -8,18 +9,19 @@ namespace SharedResources.Handlers
 {
     public class DeviceClientHandler
     {
+
         public SmartDeviceModel Settings { get; private set; } = new();
         private DeviceClient? _client;
 
-        public DeviceClientHandler(string deviceId, string deviceName, string deviceType)
+        public DeviceClientHandler(string deviceId, string deviceName, string deviceType, string connectionString)
         {
             Settings!.DeviceId = deviceId;
             Settings.DeviceName = deviceName;
             Settings.DeviceType = deviceType;
-            Settings.ConnectionString = "HostName=gurra-iothub.azure-devices.net;DeviceId=f0468151-3b8b-4d92-8e42-cf679a27796f;SharedAccessKey=6ycjkPeWyIRubkKcKX9BjTmOuZn0mBr6tAIoTN5ynLI=";
+            Settings.ConnectionString = connectionString;
         }
 
-        public ResultResponse Initialize()
+        public async Task<ResultResponse> Initialize()
         {
             var response = new ResultResponse();
 
@@ -31,7 +33,7 @@ namespace SharedResources.Handlers
                 {
                     _client.SetConnectionStatusChangesHandler(ConnectionStatusChangeHandler);
 
-                    Task.WhenAll(
+                    await Task.WhenAll(
                         _client.SetMethodDefaultHandlerAsync(DirectMethodDefaultCallback, null),
                         UpdateDeviceTwinPropertiesAsync()
                     );
@@ -55,15 +57,20 @@ namespace SharedResources.Handlers
         }
 
 
-        public ResultResponse Disconnect()
+        public async Task<ResultResponse> DisconnectAsync(string connectionString)
         {
             var response = new ResultResponse();
+
+            Settings.ConnectionString = connectionString;
+
+            _client = DeviceClient.CreateFromConnectionString(Settings.ConnectionString.ToString());
 
             try
             {
                 Settings.DeviceState = false;
-                Task.Run(UpdateDeviceTwinDeviceStateAsync);
+                Settings.ConnectionState = false;
                 UpdateDeviceTwinConnectionStateAsync(false).Wait();
+                await UpdateDeviceTwinDeviceStateAsync();
 
                 response.Succeeded = true;
                 response.Message = "Device disconnected.";
@@ -98,7 +105,9 @@ namespace SharedResources.Handlers
 
             var result = await UpdateDeviceTwinDeviceStateAsync();
             if (result.Succeeded)
-                return GenerateMethodResponse("DeviceState changed set to start", 200);
+            {
+                return GenerateMethodResponse("Device has successfully started.", 200);
+            }
             else
                 return GenerateMethodResponse($"{result.Message}", 400);
         }
@@ -109,7 +118,9 @@ namespace SharedResources.Handlers
 
             var result = await UpdateDeviceTwinDeviceStateAsync();
             if (result.Succeeded)
-                return GenerateMethodResponse("DeviceState changed set to stop", 200);
+            {
+                return GenerateMethodResponse("Device has stopped.", 200);
+            }
             else
                 return GenerateMethodResponse($"{result.Message}", 400);
         }
@@ -158,10 +169,9 @@ namespace SharedResources.Handlers
                 response.Succeeded = false;
                 response.Message = ex.Message;
             }
+
             return response;
         }
-
-
 
 
         public async Task<ResultResponse> UpdateDeviceTwinPropertiesAsync()
@@ -172,7 +182,7 @@ namespace SharedResources.Handlers
             {
                 var reportedProperties = new TwinCollection
                 {
-                    ["connectionState"] = true,
+                    ["connectionState"] = Settings.ConnectionState,
                     ["deviceName"] = Settings.DeviceName,
                     ["deviceType"] = Settings.DeviceType,
                     ["deviceState"] = Settings.DeviceState

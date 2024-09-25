@@ -9,10 +9,12 @@ public class AzureHub
     private readonly RegistryManager? _registry;
     private readonly ServiceClient? _serviceClient;
 
+
     public AzureHub()
     {
         _registry = RegistryManager.CreateFromConnectionString(_connectionString);
         _serviceClient = ServiceClient.CreateFromConnectionString(_connectionString);
+
     }
 
     public async Task<IEnumerable<SmartDeviceModel>> GetDevicesAsync()
@@ -61,6 +63,7 @@ public class AzureHub
 
         return devices;
     }
+  
 
     public async Task SendDirectMethodAsync(string deviceId, string methodName)
     {

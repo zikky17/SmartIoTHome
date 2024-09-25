@@ -1,18 +1,9 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.Windows;
+﻿using Microsoft.Azure.Devices.Shared;
+using SharedResources.Handlers;
+using System.Configuration;
+using System.Diagnostics;
 using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
-using System.Windows.Input;
-using System.Windows.Media;
 using System.Windows.Media.Animation;
-using System.Windows.Media.Imaging;
-using System.Windows.Navigation;
-using System.Windows.Shapes;
 
 namespace SmartFan.Views
 {
@@ -24,34 +15,77 @@ namespace SmartFan.Views
         public HomeView()
         {
             InitializeComponent();
+            InitializeTwinHandlerAsync().ConfigureAwait(false);
         }
 
-        private bool IsActive = false;
+        public DeviceTwinHandler _twinHandler = new("HostName=gurra-iothub.azure-devices.net;DeviceId=cabb9896-0fba-47d2-b67d-0279a9745284;SharedAccessKey=ZY2h+rdNJIKDCWG39rJtofVgQYpNfeL0buMulj4Ml9A=");
+
+        private async Task InitializeTwinHandlerAsync()
+        {
+            try
+            {
+                await _twinHandler.SetDesiredPropertyUpdateCallbackAsync(OnDesiredPropertyChanged);
+                Debug.WriteLine("Desired property callback registered successfully.");
+            }
+            catch (Exception ex)
+            {
+                Debug.WriteLine($"Failed to register desired property callback: {ex.Message}");
+            }
+
+            await UpdateAnimationAsync();
+        }
+
+        private async Task OnDesiredPropertyChanged(TwinCollection desiredProperties, object userContext)
+        {
+            Debug.WriteLine("Desired properties changed.");
+
+            if (desiredProperties.Contains("deviceState"))
+            {
+                bool deviceState = desiredProperties["deviceState"];
+                Debug.WriteLine($"Device State changed to: {deviceState}");
+
+                if (deviceState)
+                {
+                    StartDeviceAnimation();
+                }
+                else
+                {
+                    StopDeviceAnimation();
+                }
+            }
+            else
+            {
+                Debug.WriteLine("deviceState not found in desired properties.");
+            }
+        }
+
+        public async Task UpdateAnimationAsync()
+        {
+            var twin = await _twinHandler.GetDeviceTwinAsync();
+            if (twin != null && twin.Properties.Reported.Contains("deviceState"))
+            {
+                bool deviceState = twin.Properties.Reported["deviceState"];
+                if (deviceState)
+                {
+                    StartDeviceAnimation();
+                }
+                else
+                {
+                    StopDeviceAnimation();
+                }
+            }
+        }
 
         public void StartDeviceAnimation()
         {
-            if (!IsActive)
-            {
                 var storyBoard = (BeginStoryboard)TryFindResource("rotate-sb");
-                IsActive = true;
                 storyBoard.Storyboard.Begin();
-                Console.WriteLine("Animation started");
-            }
         }
 
         public void StopDeviceAnimation()
         {
-            if (IsActive)
-            {
                 var storyBoard = (BeginStoryboard)TryFindResource("rotate-sb");
-                IsActive = false;
                 storyBoard.Storyboard.Stop();
-                Console.WriteLine("Animation stopped");
-            }
         }
-
-
-
-
     }
 }

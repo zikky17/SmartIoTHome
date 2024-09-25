@@ -9,7 +9,6 @@ public class SmartDeviceModel
     public string? DeviceName { get; set; }
     public string? DeviceType { get; set; }
 
-
     public event Action<bool>? DeviceStateChanged;
     private bool deviceState;
 

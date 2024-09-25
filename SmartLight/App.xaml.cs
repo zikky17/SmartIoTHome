@@ -2,8 +2,11 @@
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 using SharedResources.Handlers;
+using SharedResources.Models;
 using SmartLight.ViewModels;
 using SmartLight.Views;
+using System.Configuration;
+using System.Diagnostics;
 using System.Windows;
 
 namespace SmartLight
@@ -38,33 +41,21 @@ namespace SmartLight
             using var cts = new CancellationTokenSource();
             try
             {
+                var connectionString = "HostName=gurra-iothub.azure-devices.net;DeviceId=f0468151-3b8b-4d92-8e42-cf679a27796f;SharedAccessKey=6ycjkPeWyIRubkKcKX9BjTmOuZn0mBr6tAIoTN5ynLI=";
+                var dc = new DeviceClientHandler("f0468151-3b8b-4d92-8e42-cf679a27796f", "SmartLight", "Light", connectionString);
+
+                var initializeResult = await dc.Initialize();
+                if (!initializeResult.Succeeded)
+                {
+                    Debug.WriteLine($"Device initialization failed: {initializeResult.Message}");
+                }
+
                 await host!.RunAsync(cts.Token);
             }
-            catch { }
-
-            await host!.RunAsync();
-
-            InitializeDevice();
-        }
-
-        private void InitializeDevice()
-        {
-            var dc = new DeviceClientHandler("e677eda9-6bf4-48b9-83da-60785bf972e6", "SmartLight", "Light");
-
-            var initalizeResult = dc.Initialize();
-
-            dc.Settings.DeviceStateChanged += (deviceState) =>
+            catch (Exception ex)
             {
-                _logger.LogInformation($"{deviceState}");
-            };
-
-
-            AppDomain.CurrentDomain.ProcessExit += (s, e) =>
-            {
-                var disconnectResult = dc.Disconnect();
-               _logger.LogInformation($"Disconnect {disconnectResult}");
-            };
+                Debug.WriteLine($"Error during startup: {ex.Message}");
+            }
         }
     }
-
 }

@@ -1,5 +1,7 @@
-﻿using SharedResources.Handlers;
+﻿using Microsoft.Azure.Devices;
+using SharedResources.Handlers;
 using SharedResources.Models;
+using System.Diagnostics;
 
 namespace SmartHub.ViewModels;
 
