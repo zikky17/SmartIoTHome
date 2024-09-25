@@ -1,6 +1,7 @@
 ﻿using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
+using SharedResources.Data;
 using SharedResources.Handlers;
 using SharedResources.Managers;
 using SharedResources.Models;
@@ -30,6 +31,12 @@ namespace SmartTemperature
                 services.AddSingleton<HomeView>();
                 services.AddSingleton<HomeVM>();
 
+                services.AddSingleton<IDatabaseContext>(sp =>
+                {
+                    var logger = sp.GetRequiredService<ILogger<SQLiteContext>>();
+                    return new SQLiteContext(logger, () => Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData));
+                });
+
             }).Build();
 
         }
@@ -45,11 +52,23 @@ namespace SmartTemperature
                 var connectionString = "HostName=gurra-iothub.azure-devices.net;DeviceId=798197a0-e07f-453c-92c5-9a2121a2d673;SharedAccessKey=KaJ+2FmYJPW2L2OVn84wX5fSC3hgVHCbfAIoTFAUVuA=";
                 var dc = new DeviceClientHandler("798197a0-e07f-453c-92c5-9a2121a2d673", "SmartTemp", "Temp", connectionString);
 
+                var settings = new DeviceSettings
+                {
+                    Id = dc.Settings.DeviceId,
+                    Type = dc.Settings.DeviceType,
+                    ConnectionString = connectionString,
+                    Location = "Kitchen"
+                };
+
                 var initializeResult = await dc.Initialize();
                 if (!initializeResult.Succeeded)
                 {
                     Debug.WriteLine($"Device initialization failed: {initializeResult.Message}");
                 }
+
+                var database = host!.Services.GetRequiredService<IDatabaseContext>();
+
+                await database.SaveSettingsAsync(settings);
 
                 await host!.RunAsync(cts.Token);
             }

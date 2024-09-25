@@ -52,11 +52,23 @@ namespace SmartFan
                 var connectionString = "HostName=gurra-iothub.azure-devices.net;DeviceId=cabb9896-0fba-47d2-b67d-0279a9745284;SharedAccessKey=ZY2h+rdNJIKDCWG39rJtofVgQYpNfeL0buMulj4Ml9A=";
                 var dc = new DeviceClientHandler("cabb9896-0fba-47d2-b67d-0279a9745284", "SmartFan", "Fan", connectionString);
 
+                var settings = new DeviceSettings
+                {
+                    Id = dc.Settings.DeviceId,
+                    Type = dc.Settings.DeviceType,
+                    ConnectionString = connectionString,
+                    Location = "Living Room"
+                };
+
                 var initializeResult = await dc.Initialize();
                 if (!initializeResult.Succeeded)
                 {
                     Debug.WriteLine($"Device initialization failed: {initializeResult.Message}");
                 }
+
+                var database = host!.Services.GetRequiredService<IDatabaseContext>();
+
+                await database.SaveSettingsAsync(settings);
 
                 await host!.RunAsync(cts.Token);
             }

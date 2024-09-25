@@ -4,7 +4,7 @@ namespace SharedResources.Data;
 
 public interface IDatabaseContext
 {
-    Task<ResultResponse<DeviceSettings>> GetSettingsAsync();
+    Task<ResultResponse<DeviceSettings>> GetSettingsAsync(string id);
 
     Task<ResultResponse> ResetSettingsAsync();
 
