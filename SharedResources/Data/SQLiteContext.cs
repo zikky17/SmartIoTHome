@@ -131,5 +131,22 @@ namespace SharedResources.Data
                 return ResultResponseFactory<DeviceSettings>.Failed("");
             }
         }
+
+        public async Task<ResultResponse> DeleteDeviceSettingsAsync(DeviceSettings device)
+        {
+            try
+            {
+                if (device != null)
+                {
+                    await _context!.DeleteAsync(device);
+                    return ResultResponseFactory.Success("Device was succecsfully deleted.");
+                }
+                return ResultResponseFactory.Failed("Failed to delete.");
+            }
+            catch (Exception ex)
+            {
+                return ResultResponseFactory<DeviceSettings>.Failed("Id was not found.");
+            }
+        }
     }
 }

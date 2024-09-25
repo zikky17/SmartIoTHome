@@ -26,12 +26,26 @@
             <TextBlock Text="Location:" FontWeight="Bold" HorizontalAlignment="Center" />
             <TextBlock Text="{Binding DeviceSettings.Location}" HorizontalAlignment="Center" Margin="0, 0, 0, 10" />
 
-            <Button Content="&#xe2e1;" Command="{Binding GoToHomeCommand}"
-                    FontFamily="{StaticResource fa-solid}"
-                    HorizontalAlignment="Center" 
-                    Width="50" 
-                    Margin="0, 20, 0, 0"
-                    Style="{StaticResource btn}"/>
+            <StackPanel Orientation="Horizontal" HorizontalAlignment="Center"> 
+                <Button Content="&#xf060;" Command="{Binding GoToHomeCommand}"
+                        FontFamily="{StaticResource fa-solid}"
+                        HorizontalAlignment="Center" 
+                        Background="Black"
+                        Width="50" 
+                        Margin="0, 20, 30, 0"
+                        Style="{StaticResource btn}"/>
+
+                <Button Content="&#xf1f8;" Command="{Binding DeleteDeviceCommand}"
+                        CommandParameter="{Binding DeviceSettings}"
+                        FontFamily="{StaticResource fa-solid}"
+                        HorizontalAlignment="Center" 
+                        Width="50" 
+                        Background="Black"
+                        Foreground="red"
+                        Margin="0, 20, 0, 0"
+                        Style="{StaticResource btn}"/>
+            </StackPanel>
+           
         </StackPanel>
     </Grid>
 </UserControl>

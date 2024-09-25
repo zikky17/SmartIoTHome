@@ -46,5 +46,16 @@ namespace SmartFan.ViewModels
             var mainWindow = _serviceProvider.GetRequiredService<MainWindowVM>();
             mainWindow.CurrentViewModel = _serviceProvider.GetRequiredService<HomeVM>();
         }
+
+        [RelayCommand]
+        private async void DeleteDevice(DeviceSettings device)
+        {
+            var result = await _databaseContext.DeleteDeviceSettingsAsync(device);
+            if (result.Succeeded)
+            {
+                var mainWindow = _serviceProvider.GetRequiredService<MainWindowVM>();
+                mainWindow.CurrentViewModel = _serviceProvider.GetRequiredService<HomeVM>();
+            }
+        }
     }
 }
