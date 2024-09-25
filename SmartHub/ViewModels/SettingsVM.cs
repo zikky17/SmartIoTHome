@@ -2,6 +2,7 @@
 using CommunityToolkit.Mvvm.Input;
 using SharedResources.Data;
 using SharedResources.Factories;
+using SharedResources.Handlers;
 using SharedResources.Models;
 
 namespace SmartHub.ViewModels
@@ -10,37 +11,22 @@ namespace SmartHub.ViewModels
     {
         private readonly IDatabaseContext _context;
 
-        public SettingsVM(IDatabaseContext context)
+        public SettingsVM(IDatabaseContext context, AzureHub hub)
         {
             _context = context;
-            GetDeviceSettingsAsync().ConfigureAwait(false);
+            _hub = hub;
+            LoadHubSettings();
         }
 
         [ObservableProperty]
-        private bool isConfigured = false;
+        public string hubConnectionString;
 
-        [ObservableProperty]
-        private DeviceSettings? settings;
-
-        [RelayCommand]
-        public async Task ConfigureSettings()
+        private readonly AzureHub _hub;
+        
+        private void LoadHubSettings()
         {
-            await _context.SaveSettingsAsync(DeviceSettingsFactory.Create());
-            await GetDeviceSettingsAsync();
+            hubConnectionString = _hub.GetHubConnectionString();
         }
 
-        public async Task GetDeviceSettingsAsync()
-        {
-            var response = await _context.GetSettingsAsync();
-            Settings = response.Content;
-            IsConfigured = Settings != null;
-        }
-
-        [RelayCommand]
-        public async Task ResetSettings()
-        {
-            await _context.ResetSettingsAsync();
-            await GetDeviceSettingsAsync();
-        }
     }
 }

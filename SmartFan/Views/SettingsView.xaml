@@ -35,13 +35,14 @@
                         Margin="0, 20, 30, 0"
                         Style="{StaticResource btn}"/>
 
-                <Button Content="&#xf1f8;" Command="{Binding DeleteDeviceCommand}"
+                <Button Content="RESET" Command="{Binding ResetSettingsCommand}"
                         CommandParameter="{Binding DeviceSettings}"
-                        FontFamily="{StaticResource fa-solid}"
+                        FontFamily="{StaticResource poppins-thin}"
                         HorizontalAlignment="Center" 
                         Width="50" 
+                        FontSize="12"
                         Background="Black"
-                        Foreground="red"
+                        Foreground="White"
                         Margin="0, 20, 0, 0"
                         Style="{StaticResource btn}"/>
             </StackPanel>

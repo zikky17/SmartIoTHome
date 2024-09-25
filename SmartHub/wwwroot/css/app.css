@@ -243,6 +243,13 @@ input {
     width: 75%;
 }
 
+.cs-box {
+    padding: 20px;
+    word-break: break-all; 
+    overflow-wrap: break-word;
+    white-space: normal;
+}
+
 .button-box {
     width: 50%;
 }

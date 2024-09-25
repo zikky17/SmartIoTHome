@@ -1,14 +1,24 @@
 ﻿@page "/settings"
+@using SmartHub.ViewModels
+@inject SettingsVM viewModel
 
 
 
+<div class="container new-device-container">
+    <h3>Settings</h3>
+    <h2>Azure IoT Connection String</h2>
+    <div class="cs-box">
+        <h6>@viewModel.HubConnectionString</h6>
+    </div>
 
-<h3>Settings</h3>
+</div>
 
 
 
 
 
 @code {
+
+    
 
 }

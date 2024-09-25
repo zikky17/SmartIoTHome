@@ -48,13 +48,12 @@ namespace SmartFan.ViewModels
         }
 
         [RelayCommand]
-        private async void DeleteDevice(DeviceSettings device)
+        private async Task ResetSettings(DeviceSettings device)
         {
             var result = await _databaseContext.DeleteDeviceSettingsAsync(device);
             if (result.Succeeded)
             {
-                var mainWindow = _serviceProvider.GetRequiredService<MainWindowVM>();
-                mainWindow.CurrentViewModel = _serviceProvider.GetRequiredService<HomeVM>();
+                await _databaseContext.GetSettingsAsync(device.Id);
             }
         }
     }
