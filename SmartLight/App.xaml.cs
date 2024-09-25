@@ -28,7 +28,6 @@ namespace SmartLight
                 services.AddSingleton<MainWindowVM>();
 
                 services.AddSingleton<HomeView>();
-                services.AddSingleton<HomeVM>();
 
                 services.AddSingleton<IDatabaseContext>(sp =>
                 {
