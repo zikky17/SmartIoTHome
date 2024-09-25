@@ -9,16 +9,29 @@
              xmlns:views="clr-namespace:SmartFan.Views"             
              mc:Ignorable="d" 
              d:DesignHeight="450" d:DesignWidth="800">
-    <Grid>
-        <Label Content="SETTINGS" />
-        <Button Content="&#xf013;"
-         Width="50"
-         Height="50"
-         FontSize="24"
-         FontFamily="{StaticResource fa-solid}"
-         HorizontalAlignment="Right"
-         Margin="0, 0, 20, 20"
-         Command="{Binding GoToHomeCommand}"
-         />
+    <Grid Margin="20">
+        <StackPanel HorizontalAlignment="Center">
+
+            <Label Content="Device Settings" HorizontalAlignment="Center" FontWeight="Bold" FontSize="16" />
+
+            <TextBlock Margin="0, 20, 0, 0" Text="Device ID:" FontWeight="Bold" HorizontalAlignment="Center"/>
+            <TextBlock Text="{Binding DeviceSettings.Id}" HorizontalAlignment="Center" Margin="0, 0, 0, 10" />
+
+            <TextBlock Text="Device Type:" FontWeight="Bold" HorizontalAlignment="Center" />
+            <TextBlock Text="{Binding DeviceSettings.Type}" HorizontalAlignment="Center" Margin="0, 0, 0, 10" />
+
+            <TextBlock Text="Connection String:" HorizontalAlignment="Center" FontWeight="Bold" />
+            <TextBlock Text="{Binding DeviceSettings.ConnectionString}" HorizontalAlignment="Center" TextWrapping="Wrap" Margin="0, 0, 0, 10" />
+
+            <TextBlock Text="Location:" FontWeight="Bold" HorizontalAlignment="Center" />
+            <TextBlock Text="{Binding DeviceSettings.Location}" HorizontalAlignment="Center" Margin="0, 0, 0, 10" />
+
+            <Button Content="&#xe2e1;" Command="{Binding GoToHomeCommand}"
+                    FontFamily="{StaticResource fa-solid}"
+                    HorizontalAlignment="Center" 
+                    Width="50" 
+                    Margin="0, 20, 0, 0"
+                    Style="{StaticResource btn}"/>
+        </StackPanel>
     </Grid>
 </UserControl>
