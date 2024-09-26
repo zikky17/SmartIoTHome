@@ -1,7 +1,9 @@
-﻿using Microsoft.Azure.Devices.Shared;
+﻿using CommunityToolkit.Mvvm.ComponentModel;
+using Microsoft.Azure.Devices.Shared;
 using SharedResources.Handlers;
 using System.Configuration;
 using System.Diagnostics;
+using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Media.Animation;
 
@@ -15,10 +17,11 @@ namespace SmartFan.Views
         public HomeView()
         {
             InitializeComponent();
+            _twinHandler = new DeviceTwinHandler("HostName=gurra-iothub.azure-devices.net;DeviceId=cabb9896-0fba-47d2-b67d-0279a9745284;SharedAccessKey=ZY2h+rdNJIKDCWG39rJtofVgQYpNfeL0buMulj4Ml9A=");
             InitializeTwinHandlerAsync().ConfigureAwait(false);
         }
 
-        public DeviceTwinHandler _twinHandler = new("HostName=gurra-iothub.azure-devices.net;DeviceId=cabb9896-0fba-47d2-b67d-0279a9745284;SharedAccessKey=ZY2h+rdNJIKDCWG39rJtofVgQYpNfeL0buMulj4Ml9A=");
+        private readonly DeviceTwinHandler _twinHandler;
 
         private async Task InitializeTwinHandlerAsync()
         {
@@ -32,7 +35,6 @@ namespace SmartFan.Views
                 Debug.WriteLine($"Failed to register desired property callback: {ex.Message}");
             }
 
-            await UpdateAnimationAsync();
         }
 
         private async Task OnDesiredPropertyChanged(TwinCollection desiredProperties, object userContext)
@@ -59,33 +61,36 @@ namespace SmartFan.Views
             }
         }
 
-        public async Task UpdateAnimationAsync()
-        {
-            var twin = await _twinHandler.GetDeviceTwinAsync();
-            if (twin != null && twin.Properties.Reported.Contains("deviceState"))
-            {
-                bool deviceState = twin.Properties.Reported["deviceState"];
-                if (deviceState)
-                {
-                    StartDeviceAnimation();
-                }
-                else
-                {
-                    StopDeviceAnimation();
-                }
-            }
-        }
-
         public void StartDeviceAnimation()
         {
-                var storyBoard = (BeginStoryboard)TryFindResource("rotate-sb");
-                storyBoard.Storyboard.Begin();
+            try
+            {
+                Dispatcher.BeginInvoke(new Action(() =>
+                {
+                    var storyBoard = (BeginStoryboard)TryFindResource("rotate-sb");
+                    storyBoard.Storyboard.Begin();
+                }));
+            }
+            catch (InvalidOperationException)
+            {
+                Debug.WriteLine("rotate-sb resource not found.");
+            }
         }
 
         public void StopDeviceAnimation()
         {
-                var storyBoard = (BeginStoryboard)TryFindResource("rotate-sb");
-                storyBoard.Storyboard.Stop();
+            try
+            {
+                Dispatcher.BeginInvoke(new Action(() =>
+                {
+                    var storyBoard = (BeginStoryboard)TryFindResource("rotate-sb");
+                    storyBoard.Storyboard.Stop();
+                }));
+            }
+            catch (InvalidOperationException)
+            {
+                Debug.WriteLine("rotate-sb resource not found.");
+            }
         }
     }
 }

@@ -74,13 +74,14 @@ namespace SmartFan
                 var database = host!.Services.GetRequiredService<IDatabaseContext>();
 
                 await database.SaveSettingsAsync(settings);
-
                 await host!.RunAsync(cts.Token);
+
             }
             catch (Exception ex)
             {
                 Debug.WriteLine($"Error during startup: {ex.Message}");
             }
+
         }
     }
 }
