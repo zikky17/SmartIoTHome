@@ -371,3 +371,7 @@ input {
     box-shadow: unset !important;
 }
 
+.button-container {
+    display: flex;
+    justify-content: space-around;
+}

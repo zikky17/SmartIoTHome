@@ -45,7 +45,7 @@ namespace SmartHub.ViewModels
                     var twinCollection = new TwinCollection
                     {
                         ["deviceName"] = response.DeviceName,
-                        ["deviceType"] = response.DeviceType
+                        ["deviceType"] = RegistrationRequest.DeviceType
                     };
 
                     await client.UpdateReportedPropertiesAsync(twinCollection);

@@ -15,19 +15,33 @@
                 <div class="container">
                     <div id="@device!.DeviceId" class="device @(device.DeviceState ? "active" : null)">
                         <div class="body device-container">
-                            <i class="@GetIconClass(device.DeviceType!) @GetDeviceCssClass(device) 
+                            <i class="@GetIconClass(device.DeviceType!) @GetDeviceCssClass(device)
                                     @(device.DeviceState && device.DeviceType.ToLower() == "fan" ? " spin" : "")"></i>
                             <div class="device-name">@device.DeviceName</div>
                             <div class="state">@(device.ConnectionState ? "Connected" : "Disconnected")</div>
                             <div class="device-state">@(device.DeviceState ? "On" : "Off")</div>
                         </div>
                         <footer>
-                            <label class="switch">
-                                <InputCheckbox @bind-Value="device.DeviceState"
-                                               @onclick="() => viewModel.OnDeviceStateChanged(device)"
-                                               disabled="@(device.ConnectionState == false)" />
-                                <span class="slider round"></span>
-                            </label>
+
+                            <div class="button-container">
+                                <div>
+                                    <button><i class="fa-sharp fa-light fa-gear no-background"></i></button>
+                                </div>
+                                <div>
+                                    <label class="switch">
+                                        <InputCheckbox @bind-Value="device.DeviceState"
+                                                       @onclick="() => viewModel.OnDeviceStateChanged(device)"
+                                                       disabled="@(device.ConnectionState == false)" />
+                                        <span class="slider round"></span>
+                                    </label>
+                                </div>
+                                <div>
+                                    <button><i class="fa-light fa-trash no-background"></i></button>
+                                </div>
+
+                            </div>
+
+
                         </footer>
                     </div>
                 </div>
