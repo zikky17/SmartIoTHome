@@ -1,5 +1,38 @@
-﻿<h3>DeviceSettings</h3>
+﻿@using SharedResources.Data
+@using SharedResources.Models
+@using SmartHub.ViewModels
+@inject DeviceSettingsVM viewModel
+@inject IDatabaseContext _databaseContext
+
+@page "/device-settings/{deviceId}"
+
+<h1>SETTING</h1>
 
 @code {
+    [Parameter] public string deviceId { get; set; }
+    public SharedResources.Models.DeviceSettings? Settings { get; set; }
 
+    protected override async Task OnInitializedAsync()
+    {
+        var result = await _databaseContext.GetSettingsAsync(deviceId);
+        if (result.Succeeded)
+        {
+            Settings = result.Content;
+        }
+    }
+}
+
+<h3>Device Settings for @deviceId</h3>
+@if (Settings != null)
+{
+    <ul>
+        <li>Setting 1: @Settings.Id</li>
+        <li>Setting 2: @Settings.Type</li>
+         <li>Setting 2: @Settings.Location</li>
+        <li>Setting 2: @Settings.ConnectionString</li>
+    </ul>
+}
+else
+{
+    <p>Loading settings...</p>
 }

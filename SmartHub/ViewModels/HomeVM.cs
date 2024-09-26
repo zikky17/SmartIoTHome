@@ -1,4 +1,5 @@
-﻿using Microsoft.Azure.Devices;
+﻿using Microsoft.AspNetCore.Components;
+using Microsoft.Azure.Devices;
 using SharedResources.Handlers;
 using SharedResources.Managers;
 using SharedResources.Models;
@@ -13,11 +14,13 @@ public class HomeVM
     public Timer? Timer { get; set; }
     public int TimerInterval { get; set; } = 4000;
     public string? ResponseMessage { get; private set; }
+    private readonly NavigationManager _navigationManager;
 
-    public HomeVM(AzureHub iotHub, HttpClient http)
+    public HomeVM(AzureHub iotHub, HttpClient http, NavigationManager navigationManager)
     {
         _iotHub = iotHub;
         _http = http;
+        _navigationManager = navigationManager;
     }
 
     public async Task<IEnumerable<SmartDeviceModel>> GetDevicesAsync()
@@ -71,5 +74,15 @@ public class HomeVM
     {
         await Task.Delay(3000); 
         ResponseMessage = null;  
+    }
+
+    public void NavigateToSettings(SmartDeviceModel device)
+    {
+        if (device == null || string.IsNullOrEmpty(device.DeviceId))
+        {
+            throw new ArgumentException("Device cannot be null and must have a valid DeviceId");
+        }
+
+        _navigationManager.NavigateTo($"/device-settings/{device.DeviceId}");
     }
 }

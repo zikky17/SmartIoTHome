@@ -25,8 +25,11 @@
 
                             <div class="button-container">
                                 <div>
-                                    <button class="no-background"><i class="fa-sharp fa-light fa-gear btn-close-white"></i></button>
+                                    <button class="no-background" @onclick="() => viewModel.NavigateToSettings(device)">
+                                        <i class="fa-sharp fa-light fa-gear btn-close-white"></i>
+                                    </button>
                                 </div>
+
                                 <div>
                                     <label class="switch">
                                         <InputCheckbox @bind-Value="device.DeviceState"

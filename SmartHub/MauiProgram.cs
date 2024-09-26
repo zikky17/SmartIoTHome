@@ -36,6 +36,8 @@ namespace SmartHub
             builder.Services.AddTransient<SettingsVM>();
             builder.Services.AddTransient<Settings>();
             builder.Services.AddTransient<NewDeviceVM>();
+            builder.Services.AddTransient<DeviceSettings>();
+            builder.Services.AddTransient<DeviceSettingsVM>();
 
             builder.Services.AddScoped(sp => new HttpClient());
 
