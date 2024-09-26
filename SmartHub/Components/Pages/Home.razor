@@ -36,7 +36,7 @@
                                     </label>
                                 </div>
                                 <div>
-                                    <button class="no-background trash-button"><i class="fa-light fa-trash"></i></button>
+                                    <button @onclick="() => viewModel.DeleteDeviceAsync(device)" class="no-background trash-button"><i class="fa-light fa-trash"></i></button>
                                 </div>
 
                             </div>
@@ -53,6 +53,13 @@
                 <i class="fa-solid fa-spinner-third fa-spin"></i>
             </div>
         }
+
+        @if (!string.IsNullOrEmpty(viewModel.ResponseMessage))
+        {
+            <p>@viewModel.ResponseMessage</p>
+        }
+
+
     </div>
 </div>
 
