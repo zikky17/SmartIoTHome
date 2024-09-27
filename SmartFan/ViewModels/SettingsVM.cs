@@ -3,6 +3,7 @@ using CommunityToolkit.Mvvm.Input;
 using Microsoft.Extensions.DependencyInjection;
 using SharedResources.Data;
 using SharedResources.Models;
+using SmartFan.Views;
 
 namespace SmartFan.ViewModels
 {
@@ -54,6 +55,8 @@ namespace SmartFan.ViewModels
             if (result.Succeeded)
             {
                 await _databaseContext.GetSettingsAsync(device.Id);
+                var mainWindow = _serviceProvider.GetRequiredService<MainWindowVM>();
+                mainWindow.CurrentViewModel = _serviceProvider.GetRequiredService<SettingsVM>();
             }
         }
     }
