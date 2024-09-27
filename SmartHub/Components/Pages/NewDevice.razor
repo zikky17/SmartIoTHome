@@ -8,7 +8,7 @@
 
 <div class="new-device-container">
 
-    <h3 style="text-align:center;">Create New Device</h3>
+    <h2 class="settings-headline">Create New Device</h2>
     <div>
         <label for="deviceName">Device Name:</label>
         <input id="deviceName" @bind="viewModel.RegistrationRequest.DeviceName" />
@@ -25,7 +25,7 @@
 
     @if (!string.IsNullOrEmpty(viewModel.ResponseMessage))
     {
-        <p>@viewModel.ResponseMessage</p>
+        <p class="text-success">@viewModel.ResponseMessage</p>
     }
 </div>
 
