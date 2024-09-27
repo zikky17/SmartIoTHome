@@ -382,7 +382,7 @@ input {
 
 .settings-headline {
     text-align: center;
-    font-size: 48px;
+    font-size: 30px;
     font-weight: 100;
     color: #dedede;
 }
@@ -399,8 +399,23 @@ input {
 
 .settings-list {
     padding: 15px;
+    text-align: center;
 }
 
 .connection-string-wrap {
     overflow-wrap: anywhere;
+}
+
+h2 {
+    color: black;
+    font-weight: 300;
+}
+
+h6 {
+    color: #dedede;
+    font-weight: 200;
+}
+
+.flex-item {
+    display: flex;
 }
