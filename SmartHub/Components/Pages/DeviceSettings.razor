@@ -6,7 +6,7 @@
 
 @page "/device-settings/{deviceId}"
 
-<h1>SETTING</h1>
+<h1 class="settings-headline">SETTINGS</h1>
 
 @code {
     [Parameter] public string deviceId { get; set; }
@@ -22,14 +22,13 @@
     }
 }
 
-<h3>Device Settings for @deviceId</h3>
 @if (Settings != null)
 {
-    <ul>
-        <li>Setting 1: @Settings.Id</li>
-        <li>Setting 2: @Settings.Type</li>
-         <li>Setting 2: @Settings.Location</li>
-        <li>Setting 2: @Settings.ConnectionString</li>
+    <ul class="settings-list">
+        <li>Id: @Settings.Id</li>
+        <li>Type: @Settings.Type</li>
+         <li>Location: @Settings.Location</li>
+        <li class="connection-string-wrap">Connection String: @Settings.ConnectionString</li>
     </ul>
 }
 else
