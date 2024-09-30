@@ -47,6 +47,7 @@ namespace SharedResources.Data
                 else
                 {
                     await _context.CreateTableAsync<DeviceSettings>();
+                    await _context.CreateTableAsync<HubSettings>();
 
                     _logger.LogInformation("Database tables were created successfully.");
                 }
@@ -147,6 +148,29 @@ namespace SharedResources.Data
             {
                 return ResultResponseFactory<DeviceSettings>.Failed("Id was not found.");
             }
+        }
+
+        public async Task RegisterEmailAddress(HubSettings settings)
+        {
+            var existingSettings = await _context.Table<HubSettings>().FirstOrDefaultAsync();
+
+            if (existingSettings != null)
+            {
+                existingSettings.Email = settings.Email;
+                await _context.UpdateAsync(existingSettings);
+            }
+            else
+            {
+                await _context.InsertAsync(settings);
+            }
+        }
+
+
+
+        public async Task<string> GetRegisteredEmailAsync()
+        {
+            var email = await _context!.Table<HubSettings>().FirstOrDefaultAsync();
+            return email.Email;
         }
     }
 }
