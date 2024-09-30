@@ -2,6 +2,7 @@
 using SharedResources.Data;
 using SharedResources.Handlers;
 using SharedResources.Models;
+using System.Diagnostics;
 
 namespace SmartHub.ViewModels
 {
@@ -41,7 +42,23 @@ namespace SmartHub.ViewModels
 
         public async Task LoadEmailAddressAsync()
         {
-           CurrentEmail = await _context.GetRegisteredEmailAsync();
+            try
+            {
+                var email = await _context.GetRegisteredEmailAsync();
+                if (email != null)
+                {
+                    CurrentEmail = email;
+                }
+                else
+                {
+                    CurrentEmail = "TestEmail@live.se";
+                }
+            }
+            catch(Exception ex)
+            {
+                Debug.WriteLine(ex.Message);
+            }
+          
         }
 
     }
