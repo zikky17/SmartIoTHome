@@ -27,7 +27,8 @@
 
 
 @code {
-
-    
-
+    protected override async Task OnInitializedAsync()
+    {
+        await viewModel.LoadEmailAddressAsync();
+    }
 }

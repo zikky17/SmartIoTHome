@@ -14,7 +14,6 @@ namespace SmartHub.ViewModels
             _context = context;
             _hub = hub;
             LoadHubSettings();
-            LoadEmailAddress();
         }
 
         [ObservableProperty]
@@ -30,15 +29,15 @@ namespace SmartHub.ViewModels
         
         private void LoadHubSettings()
         {
-            hubConnectionString = _hub.GetHubConnectionString();
+            HubConnectionString = _hub.GetHubConnectionString();
         }
 
-        public void SaveEmailAddress()
+        public async void SaveEmailAddress()
         {
-            _context.RegisterEmailAddress(Settings);
+           await _context.RegisterEmailAddress(Settings);
         }
 
-        private async void LoadEmailAddress()
+        public async Task LoadEmailAddressAsync()
         {
            CurrentEmail = await _context.GetRegisteredEmailAsync();
         }

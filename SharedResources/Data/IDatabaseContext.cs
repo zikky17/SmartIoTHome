@@ -12,7 +12,7 @@ public interface IDatabaseContext
 
     Task<ResultResponse> DeleteDeviceSettingsAsync(DeviceSettings device);
 
-    Task RegisterEmailAddress(HubSettings email);
+    Task<ResultResponse> RegisterEmailAddress(HubSettings settings);
 
     Task<string> GetRegisteredEmailAsync();
 }

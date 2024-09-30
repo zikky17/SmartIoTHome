@@ -123,7 +123,7 @@ namespace SharedResources.Data
 
                 }
 
-                _logger.LogError($"Failed to save settings: ID is null or enmpty.");
+                _logger.LogError($"Failed to save settings: ID is null or empty.");
                 return ResultResponseFactory.Success("Settings were inserted successfully");
             }
             catch (Exception ex)
@@ -150,18 +150,20 @@ namespace SharedResources.Data
             }
         }
 
-        public async Task RegisterEmailAddress(HubSettings settings)
+        public async Task<ResultResponse> RegisterEmailAddress(HubSettings settings)
         {
             var existingSettings = await _context.Table<HubSettings>().FirstOrDefaultAsync();
 
             if (existingSettings != null)
             {
-                existingSettings.Email = settings.Email;
-                await _context.UpdateAsync(existingSettings);
+                var query = "UPDATE HubSettings SET Email = ?, ConnectionString = ?";
+                await _context.ExecuteAsync(query, settings.Email, settings.ConnectionString);
+                return ResultResponseFactory.Success("Email updated.");
             }
             else
             {
                 await _context.InsertAsync(settings);
+                return ResultResponseFactory.Failed("Update failed.");
             }
         }
 
