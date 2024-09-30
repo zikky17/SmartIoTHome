@@ -49,6 +49,7 @@ h1:focus {
     padding-right: var(--container-padding);
     margin-left: auto;
     margin-right: auto;
+    overflow-y: auto;
 }
 
 nav {
@@ -96,8 +97,8 @@ nav {
 
 .devices {
     display: grid;
-    grid-template-columns: repeat(3, 1fr);
-    gap: 1rem;
+    grid-template-columns: repeat(1, 1fr);
+    gap: 0.2rem;
 }
 
 .device {
@@ -120,13 +121,13 @@ nav {
         }
 
         .device .body .state {
+            margin-top: 10px;
             font-size: 0.6em;
             color: green;
         }
 
     .device footer {
         text-align: center;
-        padding-top: 0.8rem;
         padding-bottom: 0.8rem;
         background-color: #101211;
     }
@@ -220,7 +221,8 @@ nav {
 }
 
 .device-name {
-    color: darkslategrey;
+    margin: 20px, 0, 0, 0;
+    color: ghostwhite;
 }
 
 .connected {
@@ -372,6 +374,7 @@ input {
 }
 
 .button-container {
+    margin-top: 0;
     display: flex;
     justify-content: space-around;
 }
@@ -418,4 +421,10 @@ h6 {
 
 .flex-item {
     display: flex;
+}
+
+.device-head {
+    justify-content: center;
+    gap: 20px;
+
 }

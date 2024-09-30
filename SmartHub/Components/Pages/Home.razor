@@ -7,7 +7,7 @@
 @inject HomeVM viewModel
 
 <div class="container">
-    <div class="devices hub-container">
+    <div class="devices">
         @if (Devices != null)
         {
             foreach (var device in Devices)
@@ -15,11 +15,17 @@
                 <div class="container">
                     <div id="@device!.DeviceId" class="device @(device.DeviceState ? "active" : null)">
                         <div class="body device-container">
-                            <i class="@GetIconClass(device.DeviceType!) @GetDeviceCssClass(device)
+                            <div class="flex-item device-head">
+                                <i class="@GetIconClass(device.DeviceType!) @GetDeviceCssClass(device)
                                     @(device.DeviceState && device.DeviceType.ToLower() == "fan" ? " spin" : "")"></i>
-                            <div class="device-name">@device.DeviceName</div>
-                            <div class="state">@(device.ConnectionState ? "Connected" : "Disconnected")</div>
-                            <div class="device-state">@(device.DeviceState ? "On" : "Off")</div>
+                                <div class="device-name">@device.DeviceName</div>
+                                <div class="state">@(device.ConnectionState ? "Connected" : "Disconnected")</div>
+                                <div class="device-state">@(device.DeviceState ? "On" : "Off")</div>
+                            </div>
+
+
+                    
+                          
                         </div>
                         <footer>
 
