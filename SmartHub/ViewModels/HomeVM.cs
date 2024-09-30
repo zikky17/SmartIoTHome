@@ -59,7 +59,7 @@ public class HomeVM
                 {
                     ResponseMessage = $"{device.DeviceName} is now deleted.";
                     var email = new EmailCommunication();
-                    email.Send(await _context.GetRegisteredEmailAsync(), $"Device Deleted: {device.DeviceName}", "<h1></h1>", "Your device is deleted.");
+                    email.Send(await _context.GetRegisteredEmailAsync(), "Azure IoT Hub Notification", $"Your Device {device.DeviceName} was deleted.", "");
                     await HideMessageAfterDelay();
                 }
                 else

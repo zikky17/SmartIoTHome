@@ -5,19 +5,20 @@
 
 
 <div class="container new-device-container">
-    <h3 class="settings-headline">Settings</h3>
-    <hr />
     <h2 class="cs-styling">Azure IoT Connection String:</h2>
     <div class="cs-box">
         <h6 class="para-string">@viewModel.HubConnectionString</h6>
     </div>
     <div class="cs-box">
-        <h6>Current Registered Email Address: @viewModel.CurrentEmail</h6>
-        <label for="emailFromUser">Email Address:</label>
-        <input id="emailFromUser" @bind="viewModel.Settings.Email" />
-        <div class="button-box">
-            <button class="reg-btn" @onclick="viewModel.SaveEmailAddress">Register Email</button>
+        <h2 class="cs-styling">Current Email:</h2>
+        <div class="cs-box">
+            <h6 class="para-string">@viewModel.CurrentEmail</h6>
         </div>
+        <label for="emailFromUser">New Email Address:</label>
+        <input id="emailFromUser" @bind="viewModel.Settings.Email" />
+    </div>
+    <div class="button-box">
+        <button class="reg-btn" @onclick="viewModel.SaveEmailAddress">Register</button>
     </div>
 
 </div>

@@ -1,4 +1,7 @@
-﻿using Microsoft.UI.Xaml;
+﻿using Microsoft.UI;
+using Microsoft.UI.Windowing;
+using Microsoft.UI.Xaml;
+using Windows.Graphics;
 
 // To learn more about WinUI, the WinUI project structure,
 // and more about our project templates, see: http://aka.ms/winui-project-info.
@@ -17,6 +20,21 @@ namespace SmartHub.WinUI
         public App()
         {
             this.InitializeComponent();
+        }
+
+        protected override void OnLaunched(LaunchActivatedEventArgs args)
+        {
+            base.OnLaunched(args);
+
+            const int width = 400;
+            const int height = 700;
+
+            var window = Application.Windows[0].Handler.PlatformView as Microsoft.UI.Xaml.Window;
+            IntPtr windowHandle = WinRT.Interop.WindowNative.GetWindowHandle(window);
+            var windowId = Win32Interop.GetWindowIdFromWindow(windowHandle);
+            var appWindow = AppWindow.GetFromWindowId(windowId);
+
+            appWindow.Resize(new SizeInt32(width, height));
         }
 
         protected override MauiApp CreateMauiApp() => MauiProgram.CreateMauiApp();
