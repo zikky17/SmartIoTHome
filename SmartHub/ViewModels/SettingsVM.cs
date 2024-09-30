@@ -1,9 +1,6 @@
 ﻿using CommunityToolkit.Mvvm.ComponentModel;
-using CommunityToolkit.Mvvm.Input;
 using SharedResources.Data;
-using SharedResources.Factories;
 using SharedResources.Handlers;
-using SharedResources.Models;
 
 namespace SmartHub.ViewModels
 {
