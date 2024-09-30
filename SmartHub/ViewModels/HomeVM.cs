@@ -1,8 +1,11 @@
 ﻿using Microsoft.AspNetCore.Components;
 using Microsoft.Azure.Devices;
+using SharedResources.Communication;
+using SharedResources.Data;
 using SharedResources.Handlers;
 using SharedResources.Managers;
 using SharedResources.Models;
+using SQLite;
 using System.Diagnostics;
 
 namespace SmartHub.ViewModels;
@@ -15,12 +18,14 @@ public class HomeVM
     public int TimerInterval { get; set; } = 4000;
     public string? ResponseMessage { get; private set; }
     private readonly NavigationManager _navigationManager;
+    private readonly IDatabaseContext _context;
 
-    public HomeVM(AzureHub iotHub, HttpClient http, NavigationManager navigationManager)
+    public HomeVM(AzureHub iotHub, HttpClient http, NavigationManager navigationManager, IDatabaseContext context)
     {
         _iotHub = iotHub;
         _http = http;
         _navigationManager = navigationManager;
+        _context = context;
     }
 
     public async Task<IEnumerable<SmartDeviceModel>> GetDevicesAsync()
@@ -53,6 +58,8 @@ public class HomeVM
                 if (response.Succeeded)
                 {
                     ResponseMessage = $"{device.DeviceName} is now deleted.";
+                    var email = new EmailCommunication();
+                    email.Send(await _context.GetRegisteredEmailAsync(), $"Device Deleted: {device.DeviceName}", "<h1></h1>", "Your device is deleted.");
                     await HideMessageAfterDelay();
                 }
                 else
