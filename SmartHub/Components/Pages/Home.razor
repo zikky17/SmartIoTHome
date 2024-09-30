@@ -4,6 +4,7 @@
 @using SmartHub.ViewModels
 @using SharedResources.Models
 @using System.Globalization
+@using Components.Popups
 @inject HomeVM viewModel
 
 <div class="container">
@@ -24,8 +25,8 @@
                             </div>
 
 
-                    
-                          
+
+
                         </div>
                         <footer>
 
@@ -45,8 +46,10 @@
                                     </label>
                                 </div>
                                 <div>
-                                    <button @onclick="() => viewModel.DeleteDeviceAsync(device)" class="no-background trash-button"><i class="fa-light fa-trash"></i></button>
+                                    <button @onclick="() => ShowConfirmation(device)" class="no-background trash-button"><i class="fa-light fa-trash"></i></button>
                                 </div>
+
+                               
 
                             </div>
 
@@ -55,6 +58,7 @@
                     </div>
                 </div>
             }
+            
         }
         else
         {
@@ -68,11 +72,26 @@
             <p>@viewModel.ResponseMessage</p>
         }
 
+      
 
     </div>
+    <div>
+        <SmartHub.Components.Popups.ConfirmationPopup ShowPopup="@showConfirmationPopUp"
+                                                      Title="Delete Device"
+                                                      Message="Are you sure you want to delete this device?"
+                                                      OnClose="OnDeleteConfirmation" />
+    </div>
+   
+
 </div>
 
+
+
+
+
 @code {
+    private bool showConfirmationPopUp = false;
+    private SmartDeviceModel? deviceToDelete;
     private IEnumerable<SmartDeviceModel> Devices = Array.Empty<SmartDeviceModel>();
 
     protected override async Task OnInitializedAsync()
@@ -119,4 +138,24 @@
 
         return cssClass;
     }
+
+    private void ShowConfirmation(SmartDeviceModel device)
+    {
+        deviceToDelete = device;
+        showConfirmationPopUp = true;
+    }
+
+    private async Task OnDeleteConfirmation(bool confirmed)
+    {
+        showConfirmationPopUp = false;
+
+        if (confirmed && deviceToDelete != null)
+        {
+            await viewModel.DeleteDeviceAsync(deviceToDelete);
+        }
+    }
+
 }
+
+
+

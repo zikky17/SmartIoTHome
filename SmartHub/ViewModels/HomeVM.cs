@@ -1,12 +1,10 @@
 ﻿using Microsoft.AspNetCore.Components;
-using Microsoft.Azure.Devices;
+using Microsoft.JSInterop;
 using SharedResources.Communication;
 using SharedResources.Data;
 using SharedResources.Handlers;
 using SharedResources.Managers;
 using SharedResources.Models;
-using SQLite;
-using System.Diagnostics;
 
 namespace SmartHub.ViewModels;
 
@@ -48,33 +46,34 @@ public class HomeVM
 
     public async Task DeleteDeviceAsync(SmartDeviceModel device)
     {
-        if(!string.IsNullOrEmpty(device.DeviceId))
-        {
-            var hubManager = new IoTHubManager("HostName=gurra-iothub.azure-devices.net;SharedAccessKeyName=iothubowner;SharedAccessKey=/6xdlTOp1WhRRbgMsWuAS+FCnQSBLRI9BAIoTAU4LdE=");
 
-            try
+            if (!string.IsNullOrEmpty(device.DeviceId))
             {
-              var response = await hubManager.RemoveDeviceAsync(device.DeviceId);
-                if (response.Succeeded)
+                var hubManager = new IoTHubManager("HostName=gurra-iothub.azure-devices.net;SharedAccessKeyName=iothubowner;SharedAccessKey=/6xdlTOp1WhRRbgMsWuAS+FCnQSBLRI9BAIoTAU4LdE=");
+
+                try
                 {
-                    ResponseMessage = $"{device.DeviceName} is now deleted.";
-                    var email = new EmailCommunication();
-                    email.Send(await _context.GetRegisteredEmailAsync(), "Azure IoT Hub Notification", $"Your Device {device.DeviceName} was deleted.", "");
+                    var response = await hubManager.RemoveDeviceAsync(device.DeviceId);
+                    if (response.Succeeded)
+                    {
+                        ResponseMessage = $"{device.DeviceName} is now deleted.";
+                        var email = new EmailCommunication();
+                        email.Send(await _context.GetRegisteredEmailAsync(), "Azure IoT Hub Notification", $"Your Device {device.DeviceName} was deleted.", "");
+                        await HideMessageAfterDelay();
+                    }
+                    else
+                    {
+                        ResponseMessage = "Failed to delete device.";
+                        await HideMessageAfterDelay();
+                    }
+                }
+                catch (Exception ex)
+                {
+                    ResponseMessage += ex.ToString();
                     await HideMessageAfterDelay();
                 }
-                else
-                {
-                    ResponseMessage = "Failed to delete device.";
-                    await HideMessageAfterDelay();
-                }
-            }
-            catch (Exception ex)
-            {
-                ResponseMessage += ex.ToString();
-                await HideMessageAfterDelay();
-            }
 
-        }
+            }
     }
 
     private async Task HideMessageAfterDelay()
