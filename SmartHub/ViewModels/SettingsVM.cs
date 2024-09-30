@@ -24,6 +24,7 @@ namespace SmartHub.ViewModels
 
         [ObservableProperty]
         public string currentEmail;
+        public string? Message { get; private set; }
 
         private readonly AzureHub _hub;
         
@@ -32,9 +33,10 @@ namespace SmartHub.ViewModels
             HubConnectionString = _hub.GetHubConnectionString();
         }
 
-        public async void SaveEmailAddress()
+        public async Task SaveEmailAddress()
         {
-           await _context.RegisterEmailAddress(Settings);
+          await _context.RegisterEmailAddress(Settings);
+          Message = $"{Settings.Email} saved as current email address.";
         }
 
         public async Task LoadEmailAddressAsync()

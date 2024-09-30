@@ -14,12 +14,19 @@
         <div class="cs-box">
             <h6 class="para-string">@viewModel.CurrentEmail</h6>
         </div>
-        <label for="emailFromUser">New Email Address:</label>
-        <input id="emailFromUser" @bind="viewModel.Settings.Email" />
+        <div>
+            <label for="emailFromUser">New Email Address:</label>
+            <input id="emailFromUser" @bind="viewModel.Settings.Email" />
+        </div>
+        <div class="button-box mt-3">
+            <button class="reg-btn" @onclick="async () => await SaveEmailAddress()">Register</button>
+        </div>
     </div>
-    <div class="button-box">
-        <button class="reg-btn" @onclick="viewModel.SaveEmailAddress">Register</button>
-    </div>
+  
+    @if (!string.IsNullOrEmpty(viewModel.Message))
+    {
+        <p class="text-success">@viewModel.Message</p>
+    }
 
 </div>
 
@@ -31,5 +38,11 @@
     protected override async Task OnInitializedAsync()
     {
         await viewModel.LoadEmailAddressAsync();
+    }
+
+    private async Task SaveEmailAddress()
+    {
+        await viewModel.SaveEmailAddress();
+        StateHasChanged();
     }
 }
