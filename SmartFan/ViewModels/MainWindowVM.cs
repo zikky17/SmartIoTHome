@@ -15,4 +15,9 @@ public partial class MainWindowVM : ObservableObject
         _serviceProvider = serviceProvider;
         CurrentViewModel = _serviceProvider.GetRequiredService<HomeVM>();
     }
+
+    private void GoToSettings()
+    {
+
+    }
 }

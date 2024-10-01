@@ -1,4 +1,6 @@
-﻿using Microsoft.Azure.Devices;
+﻿using Microsoft.AspNetCore.Mvc;
+using Microsoft.Azure.Devices;
+using SharedResources.Factories;
 using SharedResources.Models;
 using System.Diagnostics;
 
@@ -8,12 +10,12 @@ public class IoTHubManager
 {
     private readonly string _connectionString;
     private readonly ServiceClient? _serviceClient;
-    private readonly RegistryManager? _deviceManagement;
+    private readonly RegistryManager? _registryManager;
 
     public IoTHubManager(string connectionString)
     {
         _connectionString = connectionString;
-        _deviceManagement = RegistryManager.CreateFromConnectionString(_connectionString);
+        _registryManager = RegistryManager.CreateFromConnectionString(_connectionString);
         _serviceClient = ServiceClient.CreateFromConnectionString(_connectionString);
     }
 
@@ -24,13 +26,13 @@ public class IoTHubManager
 
         DeviceInstance deviceInstance = new()
         {
-            Device = await _deviceManagement!.GetDeviceAsync(deviceId) ?? await _deviceManagement!.AddDeviceAsync(new Device(deviceId))
+            Device = await _registryManager!.GetDeviceAsync(deviceId) ?? await _registryManager!.AddDeviceAsync(new Device(deviceId))
         };
 
-        await UpdateDesiredPropertyAsync(deviceInstance.Device, nameof(deviceName), deviceName);
+        await UpdateDesiredPropertyAsync(deviceInstance.Device, "deviceState", deviceInstance.Device.Status.ToString());
 
         deviceInstance.ConnectionString = GetDeviceConnectionString(deviceInstance.Device);
-        deviceInstance.Twin = await _deviceManagement.GetTwinAsync(deviceInstance.Device.Id);
+        deviceInstance.Twin = await _registryManager.GetTwinAsync(deviceInstance.Device.Id);
 
         return deviceInstance;
     }
@@ -45,10 +47,10 @@ public class IoTHubManager
     {
         try
         {
-            var twin = await _deviceManagement!.GetTwinAsync(device.Id);
+            var twin = await _registryManager!.GetTwinAsync(device.Id);
             twin.Properties.Desired[key] = value;
 
-            await _deviceManagement.UpdateTwinAsync(device.Id, twin, twin.ETag);
+            await _registryManager.UpdateTwinAsync(device.Id, twin, twin.ETag);
             return true;
         }
         catch (Exception ex)
@@ -58,6 +60,18 @@ public class IoTHubManager
         }
     }
 
+    public async Task<ResultResponse> RemoveDeviceAsync(string deviceId)
+    {
+        try
+        {
+            await _registryManager!.RemoveDeviceAsync(deviceId);
+            return ResultResponseFactory.Success("Device is deleted.");
+        }
+        catch (Exception ex)
+        {
+            return ResultResponseFactory.Failed(ex.Message);
+        }
+    }
 
 
 }

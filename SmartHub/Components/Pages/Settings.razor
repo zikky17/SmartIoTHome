@@ -1,14 +1,48 @@
 ﻿@page "/settings"
+@using SmartHub.ViewModels
+@inject SettingsVM viewModel
 
 
 
+<div class="container new-device-container">
+    <h2 class="cs-styling">Azure IoT Connection String:</h2>
+    <div class="cs-box">
+        <h6 class="para-string">@viewModel.HubConnectionString</h6>
+    </div>
+    <div class="cs-box">
+        <h2 class="cs-styling">Current Email:</h2>
+        <div class="cs-box">
+            <h6 class="para-string">@viewModel.CurrentEmail</h6>
+        </div>
+        <div>
+            <label for="emailFromUser">New Email Address:</label>
+            <input id="emailFromUser" @bind="viewModel.Settings.Email" />
+        </div>
+        <div class="button-box mt-3">
+            <button class="reg-btn" @onclick="async () => await SaveEmailAddress()">Register</button>
+        </div>
+    </div>
+  
+    @if (!string.IsNullOrEmpty(viewModel.Message))
+    {
+        <p class="text-success">@viewModel.Message</p>
+    }
 
-<h3>Settings</h3>
+</div>
 
 
 
 
 
 @code {
+    protected override async Task OnInitializedAsync()
+    {
+        await viewModel.LoadEmailAddressAsync();
+    }
 
+    private async Task SaveEmailAddress()
+    {
+        await viewModel.SaveEmailAddress();
+        StateHasChanged();
+    }
 }

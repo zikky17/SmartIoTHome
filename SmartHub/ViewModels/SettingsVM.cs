@@ -1,8 +1,8 @@
 ﻿using CommunityToolkit.Mvvm.ComponentModel;
-using CommunityToolkit.Mvvm.Input;
 using SharedResources.Data;
-using SharedResources.Factories;
+using SharedResources.Handlers;
 using SharedResources.Models;
+using System.Diagnostics;
 
 namespace SmartHub.ViewModels
 {
@@ -10,37 +10,56 @@ namespace SmartHub.ViewModels
     {
         private readonly IDatabaseContext _context;
 
-        public SettingsVM(IDatabaseContext context)
+        public SettingsVM(IDatabaseContext context, AzureHub hub)
         {
             _context = context;
-            GetDeviceSettingsAsync().ConfigureAwait(false);
+            _hub = hub;
+            LoadHubSettings();
         }
 
         [ObservableProperty]
-        private bool isConfigured = false;
+        public string hubConnectionString;
 
         [ObservableProperty]
-        private DeviceSettings? settings;
+        public HubSettings settings = new();
 
-        [RelayCommand]
-        public async Task ConfigureSettings()
+        [ObservableProperty]
+        public string currentEmail;
+        public string? Message { get; private set; }
+
+        private readonly AzureHub _hub;
+        
+        private void LoadHubSettings()
         {
-            await _context.SaveSettingsAsync(DeviceSettingsFactory.Create());
-            await GetDeviceSettingsAsync();
+            HubConnectionString = _hub.GetHubConnectionString();
         }
 
-        public async Task GetDeviceSettingsAsync()
+        public async Task SaveEmailAddress()
         {
-            var response = await _context.GetSettingsAsync();
-            Settings = response.Content;
-            IsConfigured = Settings != null;
+          await _context.RegisterEmailAddress(Settings);
+          Message = $"{Settings.Email} saved as current email address.";
         }
 
-        [RelayCommand]
-        public async Task ResetSettings()
+        public async Task LoadEmailAddressAsync()
         {
-            await _context.ResetSettingsAsync();
-            await GetDeviceSettingsAsync();
+            try
+            {
+                var email = await _context.GetRegisteredEmailAsync();
+                if (email != null)
+                {
+                    CurrentEmail = email;
+                }
+                else
+                {
+                    CurrentEmail = "TestEmail@live.se";
+                }
+            }
+            catch(Exception ex)
+            {
+                Debug.WriteLine(ex.Message);
+            }
+          
         }
+
     }
 }

@@ -47,10 +47,10 @@ namespace SharedResources.Data
                 else
                 {
                     await _context.CreateTableAsync<DeviceSettings>();
+                    await _context.CreateTableAsync<HubSettings>();
 
                     _logger.LogInformation("Database tables were created successfully.");
                 }
-
             }
             catch (Exception ex)
             {
@@ -58,11 +58,12 @@ namespace SharedResources.Data
             }
         }
 
-        public async Task<ResultResponse<DeviceSettings>> GetSettingsAsync()
+        public async Task<ResultResponse<DeviceSettings>> GetSettingsAsync(string id)
         {
             try
             {
-                var deviceSettings = (await _context!.Table<DeviceSettings>().ToListAsync()).SingleOrDefault();
+                var deviceSettings = (await _context!.Table<DeviceSettings>().Where(sd => sd.Id == id).ToListAsync()).SingleOrDefault();
+
                 if (deviceSettings != null)
                 {
                     return ResultResponseFactory<DeviceSettings>.Success($"Settings for Id {deviceSettings.Id} were retrieved.", deviceSettings);
@@ -104,7 +105,7 @@ namespace SharedResources.Data
             {
                 if (!string.IsNullOrEmpty(settings.Id))
                 {
-                    var response = await GetSettingsAsync();
+                    var response = await GetSettingsAsync(settings.Id);
 
                     if (response.Content != null)
                     {
@@ -122,14 +123,56 @@ namespace SharedResources.Data
 
                 }
 
-                _logger.LogError($"Failed to save settings: ID is null or enmpty.");
-                return ResultResponseFactory.Success("Settingss were inserted successfully");
+                _logger.LogError($"Failed to save settings: ID is null or empty.");
+                return ResultResponseFactory.Success("Settings were inserted successfully");
             }
             catch (Exception ex)
             {
                 _logger.LogError("Failed to reset.");
                 return ResultResponseFactory<DeviceSettings>.Failed("");
             }
+        }
+
+        public async Task<ResultResponse> DeleteDeviceSettingsAsync(DeviceSettings device)
+        {
+            try
+            {
+                if (device != null)
+                {
+                    await _context!.DeleteAsync(device);
+                    return ResultResponseFactory.Success("Device was succecsfully deleted.");
+                }
+                return ResultResponseFactory.Failed("Failed to delete.");
+            }
+            catch (Exception ex)
+            {
+                return ResultResponseFactory<DeviceSettings>.Failed("Id was not found.");
+            }
+        }
+
+        public async Task<ResultResponse> RegisterEmailAddress(HubSettings settings)
+        {
+            var existingSettings = await _context.Table<HubSettings>().FirstOrDefaultAsync();
+
+            if (existingSettings != null)
+            {
+                var query = "UPDATE HubSettings SET Email = ?, ConnectionString = ?";
+                await _context.ExecuteAsync(query, settings.Email, settings.ConnectionString);
+                return ResultResponseFactory.Success("Email updated.");
+            }
+            else
+            {
+                await _context.InsertAsync(settings);
+                return ResultResponseFactory.Failed("Update failed.");
+            }
+        }
+
+
+
+        public async Task<string> GetRegisteredEmailAsync()
+        {
+            var email = await _context!.Table<HubSettings>().FirstOrDefaultAsync();
+            return email.Email;
         }
     }
 }

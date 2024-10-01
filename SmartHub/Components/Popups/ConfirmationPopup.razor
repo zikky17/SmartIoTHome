@@ -1,0 +1,27 @@
+﻿<div class="popup @(ShowPopup ? "show" : "hide")">
+    <div class="popup-content">
+        <h3>@Title</h3>
+        <p>@Message</p>
+        <div class="popup-actions">
+            <button @onclick="Confirm">Yes</button>
+            <button @onclick="Cancel">No</button>
+        </div>
+    </div>
+</div>
+
+@code {
+    [Parameter] public bool ShowPopup { get; set; }
+    [Parameter] public string Title { get; set; } = "Confirmation";
+    [Parameter] public string Message { get; set; } = "Are you sure?";
+    [Parameter] public EventCallback<bool> OnClose { get; set; }
+
+    private void Confirm()
+    {
+        OnClose.InvokeAsync(true);
+    }
+
+    private void Cancel()
+    {
+        OnClose.InvokeAsync(false);
+    }
+}

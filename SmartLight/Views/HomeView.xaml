@@ -80,6 +80,18 @@
                        Foreground="GhostWhite"
                        RenderTransformOrigin="0.5 0.5" />
         </Grid>
+        <Button Grid.Row="4" Content="&#xf013;"
+           Width="50"
+           Height="50"
+           Style="{StaticResource btn}"
+           Background="Black"
+           Foreground="White"
+           FontSize="24"
+           FontFamily="{StaticResource fa-solid}"
+           HorizontalAlignment="Right"
+           Margin="0, 0, 20, 20"
+           Command="{Binding GoToSettingsCommand}"
+           />
 
     </Grid>
 

@@ -2,6 +2,8 @@
 using Microsoft.Azure.Devices.Client;
 using Microsoft.Azure.Devices.Shared;
 using Newtonsoft.Json;
+using SharedResources.Data;
+using SharedResources.Factories;
 using SharedResources.Models;
 using System.Text;
 
@@ -27,6 +29,8 @@ namespace SharedResources.Handlers
 
             try
             {
+
+
                 _client = DeviceClient.CreateFromConnectionString(Settings.ConnectionString);
 
                 if (_client != null)
@@ -55,7 +59,6 @@ namespace SharedResources.Handlers
 
             return response;
         }
-
 
         public async Task<ResultResponse> DisconnectAsync(string connectionString)
         {
@@ -198,6 +201,10 @@ namespace SharedResources.Handlers
                     response.Succeeded = false;
                     response.Message = "Device client not found.";
                 }
+
+                response.Succeeded = true;
+
+
             }
             catch (Exception ex)
             {
