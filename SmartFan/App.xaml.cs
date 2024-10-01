@@ -1,4 +1,5 @@
-﻿using Microsoft.Extensions.DependencyInjection;
+﻿using Microsoft.Azure.Devices;
+using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 using SharedResources.Data;
@@ -20,7 +21,6 @@ namespace SmartFan
     {
         private static IHost? host;
         private readonly ILogger _logger;
-        private readonly IoTHubManager _hub;
 
         public App()
         {
@@ -55,11 +55,27 @@ namespace SmartFan
                 var connectionString = "HostName=gurra-iothub.azure-devices.net;DeviceId=cabb9896-0fba-47d2-b67d-0279a9745284;SharedAccessKey=SULmlJ9u55cCjNBiC2wT6IsdzTyJPhS5t6J4RYjg4wM=";
                 var dc = new DeviceClientHandler("cabb9896-0fba-47d2-b67d-0279a9745284", "SmartFan", "Fan", connectionString);
 
-               
+                var hubConnectionString = "HostName=gurra-iothub.azure-devices.net;SharedAccessKeyName=iothubowner;SharedAccessKey=/6xdlTOp1WhRRbgMsWuAS+FCnQSBLRI9BAIoTAU4LdE=";
+
                 var initializeResult = await dc.Initialize();
                 if (!initializeResult.Succeeded)
                 {
                     Debug.WriteLine($"Device initialization failed: {initializeResult.Message}");
+                }
+
+                var iotHubManager = new IoTHubManager(hubConnectionString);
+                var device = new Device(dc.Settings.DeviceId);
+
+                bool desiredState = dc.Settings.DeviceState;
+                bool updateSuccess = await iotHubManager.UpdateDesiredPropertyAsync(device, "deviceState", desiredState.ToString().ToLower());
+
+                if (updateSuccess)
+                {
+                    Debug.WriteLine("Desired properties updated successfully.");
+                }
+                else
+                {
+                    Debug.WriteLine("Failed to update desired properties.");
                 }
 
                 var settings = new DeviceSettings

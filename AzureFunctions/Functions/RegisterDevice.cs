@@ -35,7 +35,9 @@ namespace AzureFunctions.Functions
             {
                 DeviceId = result.Device?.Id,
                 ConnectionString = result.ConnectionString,
-                DeviceName = result.Twin?.Properties.Desired["deviceName"].ToString()
+                DeviceName = result.Twin?.Properties.Desired["deviceName"].ToString(),
+                DeviceState = result.Twin?.Properties.Desired["deviceState"]
+                
             };
 
             return new OkObjectResult(response);

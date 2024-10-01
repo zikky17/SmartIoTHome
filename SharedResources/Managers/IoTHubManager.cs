@@ -29,7 +29,7 @@ public class IoTHubManager
             Device = await _registryManager!.GetDeviceAsync(deviceId) ?? await _registryManager!.AddDeviceAsync(new Device(deviceId))
         };
 
-        await UpdateDesiredPropertyAsync(deviceInstance.Device, nameof(deviceName), deviceName);
+        await UpdateDesiredPropertyAsync(deviceInstance.Device, "deviceState", deviceInstance.Device.Status.ToString());
 
         deviceInstance.ConnectionString = GetDeviceConnectionString(deviceInstance.Device);
         deviceInstance.Twin = await _registryManager.GetTwinAsync(deviceInstance.Device.Id);

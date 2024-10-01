@@ -201,6 +201,10 @@ namespace SharedResources.Handlers
                     response.Succeeded = false;
                     response.Message = "Device client not found.";
                 }
+
+                response.Succeeded = true;
+
+
             }
             catch (Exception ex)
             {
