@@ -17,36 +17,44 @@ namespace SmartFan.Views
         public HomeView()
         {
             InitializeComponent();
-            _twinHandler = new DeviceTwinHandler("HostName=gurra-iothub.azure-devices.net;DeviceId=cabb9896-0fba-47d2-b67d-0279a9745284;SharedAccessKey=ZY2h+rdNJIKDCWG39rJtofVgQYpNfeL0buMulj4Ml9A=");
             InitializeTwinHandlerAsync().ConfigureAwait(false);
         }
-
-        private readonly DeviceTwinHandler _twinHandler;
 
         private async Task InitializeTwinHandlerAsync()
         {
             try
             {
-                await _twinHandler.SetDesiredPropertyUpdateCallbackAsync(OnDesiredPropertyChanged);
-                Debug.WriteLine("Desired property callback registered successfully.");
+                // Skapa en instans av DeviceTwinHandler med rätt anslutningssträng
+                var deviceTwinHandler = new DeviceTwinHandler("HostName=gurra-iothub.azure-devices.net;DeviceId=cabb9896-0fba-47d2-b67d-0279a9745284;SharedAccessKey=SULmlJ9u55cCjNBiC2wT6IsdzTyJPhS5t6J4RYjg4wM=");
+
+                // Kontrollera att anslutningen lyckas
+                bool isConnected = await deviceTwinHandler.InitializeConnectionAsync();
+                if (isConnected)
+                {
+                    // Registrera callback för desired properties när anslutningen är klar
+                    await deviceTwinHandler.SetDesiredPropertyUpdateCallbackAsync(OnDesiredPropertyChanged);
+                    Debug.WriteLine("Desired property callback registered successfully.");
+                }
+                else
+                {
+                    Debug.WriteLine("Failed to connect to IoT Hub.");
+                }
             }
             catch (Exception ex)
             {
                 Debug.WriteLine($"Failed to register desired property callback: {ex.Message}");
             }
-
         }
-
         private async Task OnDesiredPropertyChanged(TwinCollection desiredProperties, object userContext)
         {
             Debug.WriteLine("Desired properties changed.");
 
             if (desiredProperties.Contains("deviceState"))
             {
-                bool deviceState = desiredProperties["deviceState"];
+                string deviceState = desiredProperties["deviceState"];
                 Debug.WriteLine($"Device State changed to: {deviceState}");
 
-                if (deviceState)
+                if (deviceState == "true")
                 {
                     StartDeviceAnimation();
                 }
