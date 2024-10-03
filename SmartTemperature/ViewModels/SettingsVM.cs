@@ -4,6 +4,7 @@ using DotNetty.Handlers.Tls;
 using Microsoft.Extensions.DependencyInjection;
 using SharedResources.Data;
 using SharedResources.Models;
+using SmartTemperature.Models;
 
 namespace SmartTemperature.ViewModels
 {
@@ -12,20 +13,7 @@ namespace SmartTemperature.ViewModels
         private readonly IServiceProvider _serviceProvider;
         private readonly IDatabaseContext _databaseContext;
 
-        [ObservableProperty]
-        public bool hasSettings;
-
-        [ObservableProperty]
-        private string id;
-
-        [ObservableProperty]
-        private string location;
-
-        [ObservableProperty]
-        private string type;
-
-        [ObservableProperty]
-        private string connectionString;
+        public SmartTempModel SmartTempModel { get; set; }
 
         public DeviceSettings DeviceSettings;
 
@@ -35,6 +23,7 @@ namespace SmartTemperature.ViewModels
             _databaseContext = databaseContext;
             _serviceProvider = serviceProvider;
 
+            SmartTempModel = new SmartTempModel();
             LoadSettingsAsync().ConfigureAwait(false);
 
         }
@@ -46,18 +35,18 @@ namespace SmartTemperature.ViewModels
             {
                 DeviceSettings = result.Content;
 
-                Id = DeviceSettings.Id;
-                Location = DeviceSettings.Location;
-                Type = DeviceSettings.Type;
-                ConnectionString = DeviceSettings.ConnectionString;
-                HasSettings = true;
+                SmartTempModel.Id = DeviceSettings.Id;
+                SmartTempModel.Location = DeviceSettings.Location;
+                SmartTempModel.Type = DeviceSettings.Type;
+                SmartTempModel.ConnectionString = DeviceSettings.ConnectionString;
+                SmartTempModel.HasSettings = true;
             }
         }
 
         [RelayCommand]
         private async Task ResetSettings(DeviceSettings device)
         {
-            HasSettings = false;
+            SmartTempModel.HasSettings = false;
             var result = await _databaseContext.DeleteDeviceSettingsAsync(device);
             if (result.Succeeded)
             {
@@ -69,11 +58,11 @@ namespace SmartTemperature.ViewModels
         [RelayCommand]
         private async Task CreateNewSettings()
         {
-            HasSettings = true;
+            SmartTempModel.HasSettings = true;
 
-            DeviceSettings.Location = Location;
-            DeviceSettings.Type = Type;
-            DeviceSettings.ConnectionString = ConnectionString;
+            DeviceSettings.Location = SmartTempModel.Location;
+            DeviceSettings.Type = SmartTempModel.Type;
+            DeviceSettings.ConnectionString = SmartTempModel.ConnectionString;
 
             await _databaseContext.SaveSettingsAsync(DeviceSettings);
 

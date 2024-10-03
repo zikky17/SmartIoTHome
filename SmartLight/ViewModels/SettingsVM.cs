@@ -3,6 +3,7 @@ using CommunityToolkit.Mvvm.Input;
 using Microsoft.Extensions.DependencyInjection;
 using SharedResources.Data;
 using SharedResources.Models;
+using SmartLight.Models;
 
 namespace SmartLight.ViewModels
 {
@@ -11,20 +12,7 @@ namespace SmartLight.ViewModels
         private readonly IServiceProvider _serviceProvider;
         private readonly IDatabaseContext _databaseContext;
 
-        [ObservableProperty]
-        public bool hasSettings;
-
-        [ObservableProperty]
-        private string id;
-
-        [ObservableProperty]
-        private string location;
-
-        [ObservableProperty]
-        private string type;
-
-        [ObservableProperty]
-        private string connectionString;
+        public SmartLightModel SmartLightModel { get; set; }
 
         public DeviceSettings DeviceSettings;
 
@@ -33,7 +21,7 @@ namespace SmartLight.ViewModels
         {
             _databaseContext = databaseContext;
             _serviceProvider = serviceProvider;
-
+            SmartLightModel = new SmartLightModel();
             LoadSettingsAsync().ConfigureAwait(false);
 
         }
@@ -45,18 +33,18 @@ namespace SmartLight.ViewModels
             {
                 DeviceSettings = result.Content;
 
-                Id = DeviceSettings.Id;
-                Location = DeviceSettings.Location;
-                Type = DeviceSettings.Type;
-                ConnectionString = DeviceSettings.ConnectionString;
-                HasSettings = true;
+                SmartLightModel.Id = DeviceSettings.Id;
+                SmartLightModel.Location = DeviceSettings.Location;
+                SmartLightModel.Type = DeviceSettings.Type;
+                SmartLightModel.ConnectionString = DeviceSettings.ConnectionString;
+                SmartLightModel.HasSettings = true;
             }
         }
 
         [RelayCommand]
         private async Task ResetSettings(DeviceSettings device)
         {
-            HasSettings = false;
+            SmartLightModel.HasSettings = false;
             var result = await _databaseContext.DeleteDeviceSettingsAsync(device);
             if (result.Succeeded)
             {
@@ -68,11 +56,11 @@ namespace SmartLight.ViewModels
         [RelayCommand]
         private async Task CreateNewSettings()
         {
-            HasSettings = true;
+            SmartLightModel.HasSettings = true;
 
-            DeviceSettings.Location = Location;
-            DeviceSettings.Type = Type;
-            DeviceSettings.ConnectionString = ConnectionString;
+            DeviceSettings.Location = SmartLightModel.Location;
+            DeviceSettings.Type = SmartLightModel.Type;
+            DeviceSettings.ConnectionString = SmartLightModel.ConnectionString;
 
             await _databaseContext.SaveSettingsAsync(DeviceSettings);
 
