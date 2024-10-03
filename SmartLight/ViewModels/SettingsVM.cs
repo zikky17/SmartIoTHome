@@ -37,6 +37,8 @@ namespace SmartLight.ViewModels
                 SmartLightModel.Location = DeviceSettings.Location;
                 SmartLightModel.Type = DeviceSettings.Type;
                 SmartLightModel.ConnectionString = DeviceSettings.ConnectionString;
+                SmartLightModel.DeviceState = DeviceSettings.DeviceState.ToString();
+                SmartLightModel.DeviceState = SmartLightModel.DeviceState == "False" ? "Off" : "On";
                 SmartLightModel.HasSettings = true;
             }
         }

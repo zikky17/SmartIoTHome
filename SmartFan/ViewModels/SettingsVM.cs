@@ -39,6 +39,8 @@ namespace SmartFan.ViewModels
                 SmartFanModel.Location = DeviceSettings.Location;
                 SmartFanModel.Type = DeviceSettings.Type;
                 SmartFanModel.ConnectionString = DeviceSettings.ConnectionString;
+                SmartFanModel.DeviceState = DeviceSettings.DeviceState.ToString();
+                SmartFanModel.DeviceState = SmartFanModel.DeviceState == "False" ? "Off" : "On";
                 SmartFanModel.HasSettings = true;
             }
         }

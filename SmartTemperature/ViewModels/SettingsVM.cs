@@ -39,6 +39,9 @@ namespace SmartTemperature.ViewModels
                 SmartTempModel.Location = DeviceSettings.Location;
                 SmartTempModel.Type = DeviceSettings.Type;
                 SmartTempModel.ConnectionString = DeviceSettings.ConnectionString;
+                SmartTempModel.DeviceState = DeviceSettings.DeviceState.ToString();
+                SmartTempModel.DeviceState = SmartTempModel.DeviceState == "False" ? "Off" : "On";
+
                 SmartTempModel.HasSettings = true;
             }
         }

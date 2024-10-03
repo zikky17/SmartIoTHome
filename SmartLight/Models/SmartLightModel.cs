@@ -18,5 +18,8 @@ namespace SmartLight.Models
 
         [ObservableProperty]
         public string connectionString;
+
+        [ObservableProperty]
+        public string deviceState;
     }
 }
