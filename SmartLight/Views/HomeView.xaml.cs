@@ -1,4 +1,5 @@
-﻿using System.Windows.Controls;
+﻿using SmartLight.ViewModels;
+using System.Windows.Controls;
 
 namespace SmartLight.Views
 {

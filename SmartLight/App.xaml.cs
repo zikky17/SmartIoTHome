@@ -1,8 +1,10 @@
-﻿using Microsoft.Extensions.DependencyInjection;
+﻿using Microsoft.Azure.Devices;
+using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 using SharedResources.Data;
 using SharedResources.Handlers;
+using SharedResources.Managers;
 using SharedResources.Models;
 using SmartLight.ViewModels;
 using SmartLight.Views;
@@ -53,6 +55,22 @@ namespace SmartLight
             {
                 var connectionString = "HostName=gurra-iothub.azure-devices.net;DeviceId=f0468151-3b8b-4d92-8e42-cf679a27796f;SharedAccessKey=6ycjkPeWyIRubkKcKX9BjTmOuZn0mBr6tAIoTN5ynLI=";
                 var dc = new DeviceClientHandler("f0468151-3b8b-4d92-8e42-cf679a27796f", "SmartLight", "Light", connectionString);
+
+                var hubConnectionString = "HostName=gurra-iothub.azure-devices.net;SharedAccessKeyName=iothubowner;SharedAccessKey=/6xdlTOp1WhRRbgMsWuAS+FCnQSBLRI9BAIoTAU4LdE=";
+                var iotHubManager = new IoTHubManager(hubConnectionString);
+                var device = new Device(dc.Settings.DeviceId);
+
+                bool desiredState = dc.Settings.DeviceState;
+                bool updateSuccess = await iotHubManager.UpdateDesiredPropertyAsync(device, "deviceState", desiredState.ToString().ToLower());
+
+                if (updateSuccess)
+                {
+                    Debug.WriteLine("Desired properties updated successfully.");
+                }
+                else
+                {
+                    Debug.WriteLine("Failed to update desired properties.");
+                }
 
                 var settings = new DeviceSettings
                 {

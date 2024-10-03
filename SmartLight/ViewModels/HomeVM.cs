@@ -1,12 +1,6 @@
 ﻿using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using Microsoft.Extensions.DependencyInjection;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
 namespace SmartLight.ViewModels
 {
     public partial class HomeVM(IServiceProvider serviceProvider) : ObservableObject
@@ -20,6 +14,5 @@ namespace SmartLight.ViewModels
             var mainWindow = _serviceProvider.GetRequiredService<MainWindowVM>();
             mainWindow.CurrentViewModel = _serviceProvider.GetRequiredService<SettingsVM>();
         }
-
     }
 }

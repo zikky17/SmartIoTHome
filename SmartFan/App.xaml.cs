@@ -63,6 +63,11 @@ namespace SmartFan
                     Debug.WriteLine($"Device initialization failed: {initializeResult.Message}");
                 }
 
+                dc.Settings.DeviceStateChanged += (deviceState) =>
+                {
+                    Debug.WriteLine($"{deviceState}");
+                };
+
                 var iotHubManager = new IoTHubManager(hubConnectionString);
                 var device = new Device(dc.Settings.DeviceId);
 
