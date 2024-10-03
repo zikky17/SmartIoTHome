@@ -44,6 +44,16 @@ public class HomeVM
         {
             var methodName = device.DeviceState ? "stop" : "start";
             await _iotHub.SendDirectMethodAsync(device.DeviceId, methodName);
+            var settings = await _context.GetSettingsAsync(device.DeviceId);
+            if (methodName == "stop")
+            {
+                settings.Content!.DeviceState = false;
+            }
+            else
+            {
+                settings.Content!.DeviceState = true;
+            }
+            _context.SaveSettingsAsync(settings.Content);
 
         }
         catch (Exception ex)

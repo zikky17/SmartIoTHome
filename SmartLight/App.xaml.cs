@@ -76,6 +76,7 @@ namespace SmartLight
                 {
                     Id = dc.Settings.DeviceId,
                     Type = dc.Settings.DeviceType,
+                    DeviceState = false,
                     ConnectionString = connectionString,
                     Location = "Living Room"
                 };

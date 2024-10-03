@@ -112,6 +112,7 @@ namespace SharedResources.Data
                         response.Content.Location = settings.Location;
                         response.Content.ConnectionString = settings.ConnectionString;
                         response.Content.Type = settings.Type;
+                        response.Content.DeviceState = settings.DeviceState;
 
                         await _context!.UpdateAsync(settings);
                         return ResultResponseFactory.Success("Settings were updated successfully!");
@@ -157,7 +158,7 @@ namespace SharedResources.Data
             if (existingSettings != null)
             {
                 var query = "UPDATE HubSettings SET Email = ?, ConnectionString = ?";
-                await _context.ExecuteAsync(query, settings.Email, settings.ConnectionString);
+                await _context.ExecuteAsync(query, settings.Email);
                 return ResultResponseFactory.Success("Email updated.");
             }
             else
