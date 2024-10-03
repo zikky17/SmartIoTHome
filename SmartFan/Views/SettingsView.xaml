@@ -6,54 +6,87 @@
              xmlns:local="clr-namespace:SmartFan.Views"
              xmlns:viewmodels="clr-namespace:SmartFan.ViewModels"
              d:DataContext="{d:DesignInstance Type=viewmodels:SettingsVM}"
+             xmlns:conv="clr-namespace:SharedResourcesWPF.Resources.Converters;assembly=SharedResourcesWPF"
              xmlns:views="clr-namespace:SmartFan.Views"             
              mc:Ignorable="d" 
              d:DesignHeight="700" d:DesignWidth="400">
+    <UserControl.Resources>
+        <conv:BoolToVisibility x:Key="BoolConverter" />
+    </UserControl.Resources>
+
     <Grid Margin="20">
         <StackPanel HorizontalAlignment="Center" Margin="0, 40, 0, 0">
 
             <Label Content="Device Settings" 
-                   HorizontalAlignment="Center" 
-                   FontFamily="{StaticResource poppins-thin}" 
-                   FontWeight="Bold" 
-                   Foreground="#dedede"
-                   FontSize="40" />
+               HorizontalAlignment="Center" 
+               FontFamily="{StaticResource poppins-thin}" 
+               FontWeight="Bold" 
+               Foreground="#dedede"
+               FontSize="40" />
 
             <Border Background="Black" Height="1" HorizontalAlignment="Stretch" Margin="0,10,0,10"/>
 
             <TextBlock Margin="0, 20, 0, 10" Text="Device ID:" FontWeight="SemiBold" HorizontalAlignment="Center"/>
-            <TextBlock Foreground="#dedede" Text="{Binding DeviceSettings.Id}" FontFamily="{StaticResource poppins-light}" HorizontalAlignment="Center" Margin="0, 0, 0, 10" />
+            <TextBlock Foreground="#dedede" Text="{Binding Id}" FontFamily="{StaticResource poppins-light}" HorizontalAlignment="Center" Margin="0, 0, 0, 10" />
 
             <TextBlock Text="Device Type:" FontWeight="SemiBold" HorizontalAlignment="Center" />
-            <TextBlock Foreground="#dedede" Text="{Binding DeviceSettings.Type}" FontFamily="{StaticResource poppins-light}" HorizontalAlignment="Center" Margin="0, 5, 0, 10" />
+            <TextBlock Foreground="#dedede" Text="{Binding Type}" FontFamily="{StaticResource poppins-light}" HorizontalAlignment="Center" Margin="0, 5, 0, 10" />
 
             <TextBlock Text="Location:" FontWeight="SemiBold" HorizontalAlignment="Center" />
-            <TextBlock Foreground="#dedede" Text="{Binding DeviceSettings.Location}" HorizontalAlignment="Center" Margin="0, 5, 0, 10" />
+            <TextBlock Foreground="#dedede" Text="{Binding Location}" HorizontalAlignment="Center" Margin="0, 5, 0, 10" />
 
             <TextBlock Text="Connection String:" HorizontalAlignment="Center" FontWeight="SemiBold" />
-            <TextBlock Foreground="#dedede" Text="{Binding DeviceSettings.ConnectionString}" FontFamily="{StaticResource poppins-light}" HorizontalAlignment="Center" TextWrapping="Wrap" TextAlignment="Center" Margin="0, 5, 0, 10" />
+            <TextBlock Foreground="#dedede" Text="{Binding ConnectionString}" FontFamily="{StaticResource poppins-light}" HorizontalAlignment="Center" TextWrapping="Wrap" TextAlignment="Center" Margin="0, 5, 0, 10" />
 
-            <StackPanel Orientation="Horizontal" HorizontalAlignment="Center"> 
+            <StackPanel Visibility="{Binding HasSettings, Converter={StaticResource BoolConverter}}">
+                <TextBlock Text="Device ID cannot be changed." 
+          Foreground="Red"
+          Margin="10, 0, 0, 10"
+          HorizontalAlignment="Center"/>
+                <TextBlock Text="New Type:" HorizontalAlignment="Center"/>
+                <TextBox Text="{Binding Type, UpdateSourceTrigger=PropertyChanged}" Width="300" HorizontalAlignment="Center" />
+
+                <TextBlock Text="New Location:" HorizontalAlignment="Center"/>
+                <TextBox Text="{Binding Location, UpdateSourceTrigger=PropertyChanged}" Width="300" HorizontalAlignment="Center" />
+
+                <TextBlock Text="New Connection String:" HorizontalAlignment="Center"/>
+                <TextBox Text="{Binding ConnectionString, UpdateSourceTrigger=PropertyChanged}" Width="300" HorizontalAlignment="Center" />
+            </StackPanel>
+            
+            <StackPanel Orientation="Horizontal" HorizontalAlignment="Center">
                 <Button Content="&#xf060;" Command="{Binding GoToHomeCommand}"
-                        FontFamily="{StaticResource fa-solid}"
-                        HorizontalAlignment="Center" 
-                        Background="Black"
-                        Width="50" 
-                        Margin="0, 20, 30, 0"
-                        Style="{StaticResource btn}"/>
+                    FontFamily="{StaticResource fa-solid}"
+                    HorizontalAlignment="Center" 
+                    Background="Black"
+                    Width="50" 
+                    Margin="0, 20, 30, 0"
+                    Style="{StaticResource btn}"/>
 
                 <Button Content="RESET" Command="{Binding ResetSettingsCommand}"
-                        CommandParameter="{Binding DeviceSettings}"
-                        FontFamily="{StaticResource poppins-light}"
-                        HorizontalAlignment="Center" 
-                        Width="80" 
-                        FontSize="15"
-                        Background="Red"
-                        Foreground="White"
-                        Margin="0, 20, 0, 0"
-                        Style="{StaticResource btn}"/>
+                      CommandParameter="{Binding DeviceSettings}"
+                      FontFamily="{StaticResource poppins-light}"
+                      HorizontalAlignment="Center" 
+                      Width="80" 
+                      FontSize="15"
+                      Background="Red"
+                      Foreground="White"
+                      Margin="0, 20, 0, 0"
+                      Style="{StaticResource btn}"
+                      Visibility="{Binding HasSettings}"/>
+
+                <Button Content="SAVE SETTINGS" Command="{Binding CreateNewSettingsCommand}"
+                      CommandParameter="{Binding DeviceSettings}"
+                      FontFamily="{StaticResource poppins-light}"
+                      HorizontalAlignment="Center" 
+                      Width="150" 
+                      FontSize="15"
+                      Background="Lime"
+                      Foreground="White"
+                      Margin="10, 20, 0, 0"
+                      Style="{StaticResource btn}"
+                      Visibility="{Binding HasSettings, Converter={StaticResource BoolConverter}}"/>
+
             </StackPanel>
-           
         </StackPanel>
     </Grid>
 </UserControl>

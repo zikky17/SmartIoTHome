@@ -42,14 +42,14 @@
 
             <StackPanel Visibility="{Binding HasSettings, Converter={StaticResource BoolConverter}}">
                 <TextBlock Text="Device ID cannot be changed." 
-               Foreground="Red"
-               Margin="10, 0, 0, 10"
-               HorizontalAlignment="Center"/>
-                <TextBlock Text="New Location:" HorizontalAlignment="Center"/>
-                <TextBox Text="{Binding Location, UpdateSourceTrigger=PropertyChanged}" Width="300" HorizontalAlignment="Center" />
-
+                        Foreground="Red"
+                        Margin="10, 0, 0, 10"
+                        HorizontalAlignment="Center"/>
                 <TextBlock Text="New Type:" HorizontalAlignment="Center"/>
                 <TextBox Text="{Binding Type, UpdateSourceTrigger=PropertyChanged}" Width="300" HorizontalAlignment="Center" />
+
+                <TextBlock Text="New Location:" HorizontalAlignment="Center"/>
+                <TextBox Text="{Binding Location, UpdateSourceTrigger=PropertyChanged}" Width="300" HorizontalAlignment="Center" />
 
                 <TextBlock Text="New Connection String:" HorizontalAlignment="Center"/>
                 <TextBox Text="{Binding ConnectionString, UpdateSourceTrigger=PropertyChanged}" Width="300" HorizontalAlignment="Center" />
