@@ -4,6 +4,7 @@ using SharedResources.Data;
 using SharedResources.Handlers;
 using SharedResources.Managers;
 using SharedResources.Models;
+using SharedResources.Services;
 using System.Diagnostics;
 
 namespace SmartHub.ViewModels;
@@ -12,18 +13,21 @@ public class HomeVM
 {
     private readonly HttpClient _http;
     private readonly AzureHub _iotHub;
+    private readonly DeviceStateService _deviceStateService;
+
     public Timer? Timer { get; set; }
     public int TimerInterval { get; set; } = 4000;
     public string? ResponseMessage { get; private set; }
     private readonly NavigationManager _navigationManager;
     private readonly IDatabaseContext _context;
 
-    public HomeVM(AzureHub iotHub, HttpClient http, NavigationManager navigationManager, IDatabaseContext context)
+    public HomeVM(AzureHub iotHub, HttpClient http, NavigationManager navigationManager, IDatabaseContext context, DeviceStateService deviceStateService)
     {
         _iotHub = iotHub;
         _http = http;
         _navigationManager = navigationManager;
         _context = context;
+        _deviceStateService = deviceStateService;
     }
 
     public async Task<IEnumerable<SmartDeviceModel>> GetDevicesAsync()
@@ -106,6 +110,8 @@ public class HomeVM
         {
             throw new ArgumentException("Device cannot be null and must have a valid DeviceId");
         }
+
+        _deviceStateService.SelectedDevice = device;
 
         _navigationManager.NavigateTo($"/device-settings/{device.DeviceId}");
     }

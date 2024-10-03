@@ -2,6 +2,7 @@
 using Microsoft.Extensions.Logging;
 using SharedResources.Data;
 using SharedResources.Handlers;
+using SharedResources.Services;
 using SmartHub.Components.Pages;
 using SmartHub.ViewModels;
 
@@ -38,6 +39,7 @@ namespace SmartHub
             builder.Services.AddTransient<NewDeviceVM>();
             builder.Services.AddTransient<DeviceSettings>();
             builder.Services.AddTransient<DeviceSettingsVM>();
+            builder.Services.AddScoped<DeviceStateService>();
 
             builder.Services.AddScoped(sp => new HttpClient());
 
