@@ -2,6 +2,7 @@
 using SharedResources.Factories;
 using SharedResources.Models;
 using SQLite;
+using System.Diagnostics;
 
 namespace SharedResources.Data
 {
@@ -157,7 +158,7 @@ namespace SharedResources.Data
 
             if (existingSettings != null)
             {
-                var query = "UPDATE HubSettings SET Email = ?, ConnectionString = ?";
+                var query = "UPDATE HubSettings SET Email = ?";
                 await _context.ExecuteAsync(query, settings.Email);
                 return ResultResponseFactory.Success("Email updated.");
             }
@@ -172,8 +173,24 @@ namespace SharedResources.Data
 
         public async Task<string> GetRegisteredEmailAsync()
         {
-            var email = await _context!.Table<HubSettings>().FirstOrDefaultAsync();
-            return email.Email;
+            try
+            {
+                var email = await _context!.Table<HubSettings>().FirstOrDefaultAsync();
+                if (email != null)
+                {
+                    return email.Email;
+                }
+                else
+                {
+                    return "Example.live.se";
+                }
+            }
+            catch(Exception ex)
+            {
+                Debug.WriteLine(ex.Message);
+                return "";
+            }
+           
         }
     }
 }

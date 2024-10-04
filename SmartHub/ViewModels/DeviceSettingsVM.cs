@@ -28,7 +28,6 @@ public class DeviceSettingsVM
 
     public async Task ActivateDevice(SmartDeviceModel device)
     {
-
        await OnDeviceStateChanged(device);
     }
 

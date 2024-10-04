@@ -151,7 +151,7 @@ nav {
     .device footer {
         text-align: center;
         padding-bottom: 0.8rem;
-        background-color: darkslategray;
+        background-color: Black;
     }
 
     .device.active {
@@ -162,7 +162,7 @@ nav {
     }
 
         .device.active footer {
-            background-color: darkslategray;
+            background-color: Black;
         }
 
 .switch {
@@ -186,7 +186,7 @@ nav {
         left: 0;
         right: 0;
         bottom: 0;
-        background-color: rgba(0, 0, 0, 0.4);
+        background-color: #101211;
         transition: .4s;
     }
 
@@ -204,7 +204,7 @@ nav {
         }
 
     .switch input:checked + .slider {
-        background-color: rgba(0, 0, 0, 0.4);
+        background-color: #101211;
     }
 
         .switch input:checked + .slider:before {
@@ -234,7 +234,7 @@ nav {
 }
 
 .device-container {
-    background-color: darkslategray;
+    background-color: Black;
     border: none;
 }
 
