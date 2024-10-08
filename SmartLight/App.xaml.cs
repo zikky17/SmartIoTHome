@@ -35,6 +35,9 @@ namespace SmartLight
                 services.AddTransient<SettingsView>();
                 services.AddTransient<SettingsVM>();
 
+                services.AddSingleton<DeviceClientHandler>();
+                services.AddSingleton<IoTHubManager>(); 
+
                 services.AddSingleton<IDatabaseContext>(sp =>
                 {
                     var logger = sp.GetRequiredService<ILogger<SQLiteContext>>();

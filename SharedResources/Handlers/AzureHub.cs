@@ -69,7 +69,7 @@ public class AzureHub
                 }
                 break; 
             }
-            catch (ThrottlingException ex)
+            catch (ThrottlingException)
             {
                 retryCount++;
                 if (retryCount >= maxRetries)

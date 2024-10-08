@@ -22,6 +22,7 @@ public class DeviceSettingsVM
     public string DeviceId { get; set; } = null!;
     public string? DeviceName { get; set; }
     public string? DeviceType { get; set; }
+    public string? ResponseMessage { get; private set; }
 
     public Timer? Timer { get; set; }
     public int TimerInterval { get; set; } = 4000;
@@ -29,6 +30,7 @@ public class DeviceSettingsVM
     public async Task ActivateDevice(SmartDeviceModel device)
     {
        await OnDeviceStateChanged(device);
+        ResponseMessage = "Device state has changed.";
     }
 
     public async Task OnDeviceStateChanged(SmartDeviceModel device)
@@ -53,7 +55,17 @@ public class DeviceSettingsVM
             {
                 settings.Content!.DeviceState = true;
             }
-            _context.SaveSettingsAsync(settings.Content);
+
+            var history = new DeviceStateHistory
+            {
+                Id = device.DeviceId,
+                State = device.DeviceState,
+                TimeStamp = DateTime.Now
+            };
+
+
+
+            await _context.SaveSettingsAsync(settings.Content, history);
 
         }
         catch (Exception ex)

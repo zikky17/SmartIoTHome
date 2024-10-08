@@ -57,7 +57,15 @@ public class HomeVM
             {
                 settings.Content!.DeviceState = true;
             }
-            _context.SaveSettingsAsync(settings.Content);
+
+            var history = new DeviceStateHistory
+            {
+                Id = device.DeviceId,
+                State = device.DeviceState,
+                TimeStamp = DateTime.Now
+            };
+
+           await _context.SaveSettingsAsync(settings.Content, history);
 
         }
         catch (Exception ex)

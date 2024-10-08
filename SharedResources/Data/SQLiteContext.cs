@@ -49,6 +49,7 @@ namespace SharedResources.Data
                 {
                     await _context.CreateTableAsync<DeviceSettings>();
                     await _context.CreateTableAsync<HubSettings>();
+                    await _context.CreateTableAsync<DeviceStateHistory>();
 
                     _logger.LogInformation("Database tables were created successfully.");
                 }
@@ -79,6 +80,31 @@ namespace SharedResources.Data
             }
         }
 
+        public async Task<List<DeviceStateHistory>> GetDeviceHistory(string id)
+        {
+            try
+            {
+                if (id != null)
+                {
+                    var history = await _context!.Table<DeviceStateHistory>().Where(h => h.Id == id)
+                        .OrderBy(h => h.TimeStamp)
+                        .ToListAsync();
+                    return history;
+                }
+                else
+                {
+                    return null!;
+
+                }
+            }
+            catch (Exception ex)
+            {
+                Debug.WriteLine(ex.Message);
+                return null!;
+            }
+
+        }
+
         public async Task<ResultResponse> ResetSettingsAsync()
         {
             try
@@ -100,39 +126,48 @@ namespace SharedResources.Data
             return ResultResponseFactory<DeviceSettings>.Failed("");
         }
 
-        public async Task<ResultResponse> SaveSettingsAsync(DeviceSettings settings)
+        public async Task<ResultResponse> SaveSettingsAsync(DeviceSettings settings, DeviceStateHistory history)
         {
             try
             {
-                if (!string.IsNullOrEmpty(settings.Id))
+                if (string.IsNullOrEmpty(settings.Id))
                 {
-                    var response = await GetSettingsAsync(settings.Id);
-
-                    if (response.Content != null)
-                    {
-                        response.Content.Location = settings.Location;
-                        response.Content.ConnectionString = settings.ConnectionString;
-                        response.Content.Type = settings.Type;
-                        response.Content.DeviceState = settings.DeviceState;
-
-                        await _context!.UpdateAsync(settings);
-                        return ResultResponseFactory.Success("Settings were updated successfully!");
-                    }
-                    else
-                    {
-                        await _context!.InsertAsync(settings);
-                    }
-
+                    _logger.LogError("Failed to save settings: ID is null or empty.");
+                    return ResultResponseFactory.Failed("Settings ID is null or empty.");
                 }
 
-                _logger.LogError($"Failed to save settings: ID is null or empty.");
-                return ResultResponseFactory.Success("Settings were inserted successfully");
+                var response = await GetSettingsAsync(settings.Id);
+
+                if (response.Content != null)
+                {
+                    response.Content.Location = settings.Location;
+                    response.Content.ConnectionString = settings.ConnectionString;
+                    response.Content.Type = settings.Type;
+                    response.Content.DeviceState = settings.DeviceState;
+
+                    await _context!.UpdateAsync(settings);
+
+                    if (history != null)
+                    {
+                        await _context!.InsertAsync(history);
+                    }
+
+                    return ResultResponseFactory.Success("Settings were updated successfully!");
+
+
+                }
+                await _context!.InsertAsync(settings);
+
+
+
+                return ResultResponseFactory.Success("Settings were inserted successfully!");
             }
             catch (Exception ex)
             {
-                _logger.LogError("Failed to reset.");
-                return ResultResponseFactory<DeviceSettings>.Failed("");
+                _logger.LogError($"Failed to save settings: {ex.Message}");
+                return ResultResponseFactory<DeviceSettings>.Failed("Failed to save settings.");
             }
+
         }
 
         public async Task<ResultResponse> DeleteDeviceSettingsAsync(DeviceSettings device)
@@ -154,7 +189,7 @@ namespace SharedResources.Data
 
         public async Task<ResultResponse> RegisterEmailAddress(HubSettings settings)
         {
-            var existingSettings = await _context.Table<HubSettings>().FirstOrDefaultAsync();
+            var existingSettings = await _context!.Table<HubSettings>().FirstOrDefaultAsync();
 
             if (existingSettings != null)
             {
@@ -185,12 +220,12 @@ namespace SharedResources.Data
                     return "Example.live.se";
                 }
             }
-            catch(Exception ex)
+            catch (Exception ex)
             {
                 Debug.WriteLine(ex.Message);
                 return "";
             }
-           
+
         }
     }
 }

@@ -8,7 +8,7 @@ public interface IDatabaseContext
 
     Task<ResultResponse> ResetSettingsAsync();
 
-    Task<ResultResponse> SaveSettingsAsync(DeviceSettings settings);
+    Task<ResultResponse> SaveSettingsAsync(DeviceSettings settings, DeviceStateHistory history);
 
     Task<ResultResponse> DeleteDeviceSettingsAsync(DeviceSettings device);
 

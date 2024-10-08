@@ -18,7 +18,7 @@
                         <div class="body device-container">
                             <div class="flex-item device-head">
                                 <i class="@GetIconClass(device.DeviceType!) @GetDeviceCssClass(device)
-                                    @(device.DeviceState && device.DeviceType.ToLower() == "fan" ? " spin" : "")"></i>
+                                    @(device.DeviceState && device.DeviceType!.ToLower() == "fan" ? " spin" : "")"></i>
                                 <div class="device-name">@device.DeviceName</div>
                                 <div class="state">@(device.ConnectionState ? "Connected" : "Disconnected")</div>
                                 <div class="device-state">@(device.DeviceState ? "On" : "Off")</div>

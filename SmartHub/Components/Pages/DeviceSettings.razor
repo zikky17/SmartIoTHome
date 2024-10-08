@@ -15,17 +15,17 @@
 
     @if (Settings != null)
     {
-        <div class="settings-list">
             <hr />
+        <div class="settings-list">
             <div>
                 <h2>Id:</h2>
                 <h6>@Settings.Id</h6>
             </div>
-            <div>
+            <div class="flex-item gap-item">
                 <h2>Type:</h2>
                 <h6>@Settings.Type</h6>
             </div>
-            <div>
+            <div class="flex-item gap-item">
                 <h2>Location:</h2>
                 <h6>@Settings.Location</h6>
             </div>
@@ -33,7 +33,7 @@
                 <h2>Connection String:</h2>
                 <h6 class="connection-string-wrap">@Settings.ConnectionString</h6>
             </div>
-            <button class="reg-btn mt-3" @onclick=" async () => await viewModel.ActivateDevice(deviceStateService.SelectedDevice)">Activate Device</button>
+            <button class="reg-btn mt-3" @onclick=" async () => await viewModel.ActivateDevice(deviceStateService.SelectedDevice!)">Activate Device</button>
         </div>
 
     }
@@ -41,9 +41,16 @@
     {
         <p>Loading settings...</p>
     }
+
+    @if (!string.IsNullOrEmpty(viewModel.ResponseMessage))
+    {
+        <p class="text-success success-message">@viewModel.ResponseMessage</p>
+    }
+
+
 </div>
 @code {
-    [Parameter] public string deviceId { get; set; }
+    [Parameter] public string deviceId { get; set; } = null!;
     public SharedResources.Models.DeviceSettings? Settings { get; set; }
 
     protected override async Task OnInitializedAsync()
