@@ -1,10 +1,8 @@
-﻿using Microsoft.Azure.Devices;
-using Microsoft.Azure.Devices.Client;
+﻿using Microsoft.Azure.Devices.Client;
 using Microsoft.Azure.Devices.Shared;
 using Newtonsoft.Json;
-using SharedResources.Data;
-using SharedResources.Factories;
 using SharedResources.Models;
+using System.Diagnostics;
 using System.Text;
 
 namespace SharedResources.Handlers
@@ -37,10 +35,11 @@ namespace SharedResources.Handlers
                 {
                     _client.SetConnectionStatusChangesHandler(ConnectionStatusChangeHandler);
 
-                    await Task.WhenAll(
-                        _client.SetMethodDefaultHandlerAsync(DirectMethodDefaultCallback, null),
-                        UpdateDeviceTwinPropertiesAsync()
-                    );
+                    await _client.SetMethodDefaultHandlerAsync(DirectMethodDefaultCallback, null);
+                    Debug.WriteLine("Direct Method callback registered.");
+
+                    await UpdateDeviceTwinPropertiesAsync();
+                    Debug.WriteLine("Device twin properties updated.");
 
                     response.Succeeded = true;
                     response.Message = "Device initialized.";
@@ -112,7 +111,9 @@ namespace SharedResources.Handlers
                 return GenerateMethodResponse("Device has successfully started.", 200);
             }
             else
+            {
                 return GenerateMethodResponse($"{result.Message}", 400);
+            }
         }
 
         public async Task<MethodResponse> OnStopAsync()
@@ -121,11 +122,13 @@ namespace SharedResources.Handlers
 
             var result = await UpdateDeviceTwinDeviceStateAsync();
             if (result.Succeeded)
-            {
+            { 
                 return GenerateMethodResponse("Device has stopped.", 200);
             }
             else
+            {
                 return GenerateMethodResponse($"{result.Message}", 400);
+            }
         }
 
         public MethodResponse GenerateMethodResponse(string message, int statusCode)

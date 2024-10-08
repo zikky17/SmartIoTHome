@@ -21,7 +21,7 @@ namespace AzureFunctions.Functions
         [Function("DeleteDevice")]
         public async Task<IActionResult> Run([HttpTrigger(AuthorizationLevel.Function, "delete", Route = "DeleteDevice")] HttpRequest req, ILogger log)
         {
-            string deviceId = req.Query["deviceId"];
+            string deviceId = req.Query["deviceId"]!;
 
             if (string.IsNullOrEmpty(deviceId))
             {
