@@ -88,6 +88,7 @@ namespace SharedResources.Data
                 {
                     var history = await _context!.Table<DeviceStateHistory>().Where(h => h.Id == id)
                         .OrderBy(h => h.TimeStamp)
+                        .Take(10)
                         .ToListAsync();
                     return history;
                 }

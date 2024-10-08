@@ -35,7 +35,20 @@
             <TextBlock Text="Location:" FontWeight="SemiBold" HorizontalAlignment="Center" />
             <TextBlock Foreground="#dedede" Text="{Binding SmartTempModel.Location}" HorizontalAlignment="Center" Margin="0, 5, 0, 10" />
 
-            <TextBlock Text="Device State:" FontWeight="SemiBold" HorizontalAlignment="Center" />
+            <StackPanel HorizontalAlignment="Center"
+              Orientation="Horizontal">
+                <TextBlock Text="Device State:" 
+             FontWeight="SemiBold" 
+             HorizontalAlignment="Center"
+             Margin="100, 0, 0, 0"/>
+
+                <Button Content="History"
+              Padding="3"
+              Command="{Binding OpenHistoryCommand}"
+              CommandParameter="{Binding SmartTempModel.Id}"
+              Margin="60, 0, 0, 0" />
+
+            </StackPanel>
             <TextBlock Foreground="#dedede" Text="{Binding SmartTempModel.DeviceState}" FontFamily="{StaticResource poppins-light}" HorizontalAlignment="Center" Margin="0, 5, 0, 10" />
             
             <TextBlock Text="Connection String:" HorizontalAlignment="Center" FontWeight="SemiBold" />

@@ -10,6 +10,8 @@ public interface IDatabaseContext
 
     Task<ResultResponse> SaveSettingsAsync(DeviceSettings settings, DeviceStateHistory history);
 
+    Task<List<DeviceStateHistory>> GetDeviceHistory(string id);
+
     Task<ResultResponse> DeleteDeviceSettingsAsync(DeviceSettings device);
 
     Task<ResultResponse> RegisterEmailAddress(HubSettings settings);

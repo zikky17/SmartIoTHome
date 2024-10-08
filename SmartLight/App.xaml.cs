@@ -92,7 +92,7 @@ namespace SmartLight
 
                 var database = host!.Services.GetRequiredService<IDatabaseContext>();
 
-                await database.SaveSettingsAsync(settings);
+                await database.SaveSettingsAsync(settings, null!);
 
                 await host!.RunAsync(cts.Token);
             }
