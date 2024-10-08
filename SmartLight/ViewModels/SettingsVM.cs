@@ -16,8 +16,8 @@ namespace SmartLight.ViewModels
 
         public SmartLightModel SmartLightModel { get; set; }
 
-        public DeviceSettings DeviceSettings;
-        public List<DeviceStateHistory> DeviceHistory;
+        public DeviceSettings? DeviceSettings;
+        public List<DeviceStateHistory>? DeviceHistory;
 
 
         public SettingsVM(IDatabaseContext databaseContext, IServiceProvider serviceProvider)
@@ -63,7 +63,7 @@ namespace SmartLight.ViewModels
         {
             SmartLightModel.HasSettings = true;
 
-            DeviceSettings.Location = SmartLightModel.Location;
+            DeviceSettings!.Location = SmartLightModel.Location;
             DeviceSettings.Type = SmartLightModel.Type;
             DeviceSettings.ConnectionString = SmartLightModel.ConnectionString;
 

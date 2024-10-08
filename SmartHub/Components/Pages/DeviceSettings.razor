@@ -33,7 +33,7 @@
                 <h2>Connection String:</h2>
                 <h6 class="connection-string-wrap">@Settings.ConnectionString</h6>
             </div>
-            <button class="reg-btn mt-3" @onclick=" async () => await viewModel.ActivateDevice(deviceStateService.SelectedDevice!)">Activate Device</button>
+            <button class="reg-btn mt-3" @onclick=" async () => await viewModel.ActivateDevice(deviceStateService.SelectedDevice!)">Toggle State</button>
         </div>
 
     }
