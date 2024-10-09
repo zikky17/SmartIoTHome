@@ -37,7 +37,7 @@ namespace SmartHub.ViewModels
         public async Task SaveEmailAddress()
         {
           await _context.RegisterEmailAddress(Settings);
-          Message = $"{Settings.Email} saved as current email address.";
+          Message = $"{Settings.Email} Saved.";
           await LoadEmailAddressAsync();
         }
 

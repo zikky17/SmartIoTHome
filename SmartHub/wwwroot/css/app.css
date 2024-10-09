@@ -52,6 +52,13 @@ h1:focus {
     overflow-y: auto;
 }
 
+.scrollable-container {
+    max-height: 400px;
+    overflow-y: auto;
+    border: 1px solid lightgray; 
+    padding: 10px;
+}
+
 nav {
     position: fixed;
     bottom: 0;
