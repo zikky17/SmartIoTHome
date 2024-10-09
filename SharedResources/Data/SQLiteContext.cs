@@ -64,7 +64,7 @@ namespace SharedResources.Data
         {
             try
             {
-                var deviceSettings = (await _context!.Table<DeviceSettings>().Where(sd => sd.Id == id).ToListAsync()).SingleOrDefault();
+                var deviceSettings = await _context!.Table<DeviceSettings>().Where(sd => sd.Id == id).FirstOrDefaultAsync();
 
                 if (deviceSettings != null)
                 {

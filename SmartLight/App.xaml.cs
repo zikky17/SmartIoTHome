@@ -38,7 +38,7 @@ namespace SmartLight
                 services.AddSingleton<DeviceClientHandler>();
                 services.AddSingleton<IoTHubManager>(); 
 
-                services.AddSingleton<IDatabaseContext>(sp =>
+                services.AddTransient<IDatabaseContext>(sp =>
                 {
                     var logger = sp.GetRequiredService<ILogger<SQLiteContext>>();
                     return new SQLiteContext(logger, () => Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData));

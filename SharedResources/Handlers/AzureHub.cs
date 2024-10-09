@@ -24,8 +24,8 @@ public class AzureHub
         var query = _registry!.CreateQuery("SELECT * FROM DEVICES");
         var devices = new List<SmartDeviceModel>();
         int retryCount = 0;
-        int maxRetries = 5;
-        int delaySeconds = 10;
+        const int maxRetries = 5;
+        TimeSpan delay = TimeSpan.FromSeconds(2); 
 
         while (retryCount < maxRetries)
         {
@@ -67,7 +67,7 @@ public class AzureHub
 
                     devices.Add(device);
                 }
-                break; 
+                break;
             }
             catch (ThrottlingException)
             {
@@ -76,13 +76,15 @@ public class AzureHub
                 {
                     throw;
                 }
-                await Task.Delay(delaySeconds * 1000);
-                delaySeconds *= 2; 
+
+                await Task.Delay(delay);
+                delay = TimeSpan.FromSeconds(delay.TotalSeconds * 2);
             }
         }
 
         return devices;
     }
+
 
     public string GetHubConnectionString()
     {

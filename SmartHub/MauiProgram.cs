@@ -25,7 +25,7 @@ namespace SmartHub
 
             builder.Services.AddMauiBlazorWebView();
 
-            builder.Services.AddSingleton<IDatabaseContext>(sp =>
+            builder.Services.AddTransient<IDatabaseContext>(sp =>
             {
                 var logger = sp.GetRequiredService<ILogger<SQLiteContext>>();
                 return new SQLiteContext(logger, () => Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData));
