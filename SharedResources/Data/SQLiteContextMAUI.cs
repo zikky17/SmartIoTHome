@@ -25,6 +25,7 @@ namespace SharedResources.Data
                 if (_context != null)
                 {
                     _logger.LogInformation("Database connection was initialized");
+                    _logger.LogInformation(databasePath);
                 }
 
                 CreateTablesAsync().ConfigureAwait(false);
@@ -55,10 +56,17 @@ namespace SharedResources.Data
 
                     try
                     {
-                        var settings = await _context!.Table<HubSettings>().FirstOrDefaultAsync();
-                        if (settings.HubConnectionString == null)
+                        var settings = await _context.Table<HubSettings>().FirstOrDefaultAsync();
+
+                        if (settings == null || settings.HubConnectionString == null)
                         {
-                            await _context.InsertAsync(hubConnectionString);
+                            var newSettings = new HubSettings
+                            {
+                                HubConnectionString = hubConnectionString
+                            };
+
+                            await _context.InsertAsync(newSettings);
+                            _logger.LogInformation("HubConnectionString has been inserted successfully.");
                         }
                     }
                     catch (Exception ex)
@@ -119,16 +127,24 @@ namespace SharedResources.Data
         {
             try
             {
-                var hubConnectionString = await _context!.Table<HubSettings>().FirstOrDefaultAsync();
+                var latestHubSettings = await _context!.Table<HubSettings>()
+                        .FirstOrDefaultAsync();
+                if (latestHubSettings != null)
+                {
+                    return latestHubSettings.HubConnectionString;
+                }
+                else
+                {
+                    return null!;
+                }
 
-                return hubConnectionString.HubConnectionString;
             }
             catch (Exception ex)
             {
                 Debug.WriteLine(ex.Message);
                 return null!;
             }
-            
+
         }
     }
 }

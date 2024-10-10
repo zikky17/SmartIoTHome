@@ -17,7 +17,7 @@ namespace SmartHub.ViewModels
         }
 
         [ObservableProperty]
-        public string hubConnectionString;
+        public string hubConnectionString = null!;
 
         [ObservableProperty]
         public HubSettings settings = new();
@@ -30,7 +30,8 @@ namespace SmartHub.ViewModels
         
         private void LoadHubSettings()
         {
-            HubConnectionString = _hub.GetHubConnectionString();
+            var connectionString = _context.GetHubConnectionString();
+            HubConnectionString = connectionString.Result.ToString();
         }
 
         public async Task SaveEmailAddress()
