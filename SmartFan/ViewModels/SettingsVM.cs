@@ -1,11 +1,9 @@
 ﻿using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
-using DotNetty.Handlers.Tls;
 using Microsoft.Extensions.DependencyInjection;
 using SharedResources.Data;
 using SharedResources.Models;
 using SmartFan.Models;
-using SmartFan.Views;
 using System.Text;
 using System.Windows;
 

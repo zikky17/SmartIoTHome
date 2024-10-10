@@ -49,7 +49,6 @@ namespace SharedResources.Data
                 else
                 {
                     await _context.CreateTableAsync<HubSettings>();
-                    await _context.CreateTableAsync<DeviceStateHistory>();
 
                     _logger.LogInformation("Database tables were created successfully.");
                     var hubConnectionString = "HostName=gurra-iothub.azure-devices.net;SharedAccessKeyName=iothubowner;SharedAccessKey=/6xdlTOp1WhRRbgMsWuAS+FCnQSBLRI9BAIoTAU4LdE=";

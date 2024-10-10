@@ -48,6 +48,7 @@ namespace SharedResources.Data
                 else
                 {
                     await _context.CreateTableAsync<DeviceSettings>();
+                    await _context.CreateTableAsync<DeviceStateHistory>();
 
                     _logger.LogInformation("Database tables were created successfully.");
                 }
@@ -117,7 +118,7 @@ namespace SharedResources.Data
             }
             catch (Exception ex)
             {
-                _logger.LogError("Failed to reset.");
+                _logger.LogError("Failed to reset. " + ex.Message);
                 return ResultResponseFactory<DeviceSettings>.Failed("Settings were not reset successfully.");
             }
 
@@ -169,6 +170,12 @@ namespace SharedResources.Data
 
         }
 
+        public async Task<ResultResponse> SaveHistoryAsync(DeviceStateHistory history)
+        {
+           await _context!.InsertAsync(history);
+            return ResultResponseFactory.Success("History saved.");
+        }
+
         public async Task<ResultResponse> DeleteDeviceSettingsAsync(DeviceSettings device)
         {
             try
@@ -182,7 +189,7 @@ namespace SharedResources.Data
             }
             catch (Exception ex)
             {
-                return ResultResponseFactory<DeviceSettings>.Failed("Id was not found.");
+                return ResultResponseFactory<DeviceSettings>.Failed("Id was not found." + ex.Message);
             }
         }
 

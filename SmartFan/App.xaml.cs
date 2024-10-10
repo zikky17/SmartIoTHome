@@ -8,7 +8,6 @@ using SharedResources.Managers;
 using SharedResources.Models;
 using SmartFan.ViewModels;
 using SmartFan.Views;
-using System.Configuration;
 using System.Diagnostics;
 using System.Windows;
 
@@ -20,7 +19,6 @@ namespace SmartFan
     public partial class App : Application
     {
         private static IHost? host;
-        private readonly ILogger _logger;
 
         public App()
         {

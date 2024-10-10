@@ -11,7 +11,7 @@ namespace SharedResources.Handlers
     {
 
         public SmartDeviceModel Settings { get; private set; } = new();
-        private DeviceClient? _client;
+        public DeviceClient? _client;
 
         public DeviceClientHandler(string deviceId, string deviceName, string deviceType, string connectionString)
         {
@@ -217,7 +217,6 @@ namespace SharedResources.Handlers
 
             return response;
         }
-
 
         public async Task<ResultResponse> UpdateDeviceTwinConnectionStateAsync(bool connectionState)
         {

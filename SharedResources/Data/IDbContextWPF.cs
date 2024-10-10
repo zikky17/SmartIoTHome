@@ -14,5 +14,5 @@ public interface IDbContextWPF
 
     Task<ResultResponse> DeleteDeviceSettingsAsync(DeviceSettings device);
 
-
+    Task<ResultResponse> SaveHistoryAsync(DeviceStateHistory history);
 }
