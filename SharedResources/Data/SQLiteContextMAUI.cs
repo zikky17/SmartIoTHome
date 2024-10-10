@@ -145,7 +145,11 @@ namespace SharedResources.Data
                 Debug.WriteLine(ex.Message);
                 return null!;
             }
+        }
 
+        public async Task SaveDeviceHistory(DeviceStateHistory history)
+        {
+            await _context!.InsertAsync(history);
         }
     }
 }

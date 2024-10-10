@@ -12,44 +12,62 @@
 
     <h1 class="settings-headline">SETTINGS</h1>
 
-    @if (Settings != null)
-    {
-        <hr />
-        <div class="settings-list">
-            <div>
-                <h2>Id:</h2>
-                <h6>@Settings.Id</h6>
-            </div>
-            <div class="flex-item gap-item">
-                <h2>Type:</h2>
-                <h6>@Settings.Type</h6>
-            </div>
-            <div class="flex-item gap-item">
-                <h2>Location:</h2>
-                <h6>@Settings.Location</h6>
-            </div>
-            <div>
-                <h2>Connection String:</h2>
-                <h6 class="connection-string-wrap">@Settings.ConnectionString</h6>
-            </div>
+    <hr />
+    <div class="settings-list">
+        <div>
+            <h2>Id:</h2>
+            <h6>@deviceId</h6>
         </div>
+        <div>
+            <h2>Type:</h2>
+            <h6>@DeviceType</h6>
+        </div>
+        <div>
+            <h2>Name:</h2>
+            <h6>@DeviceName</h6>
+        </div>
+        <div>
+            <h2>Connection State:</h2>
+            <h6 style="place-items: end;">@ConnectionState</h6>
+        </div>
+        <div>
+            <h2>Device State:</h2>
+            <h6 class="connection-string-wrap">@DeviceState</h6>
+        </div>
+        @if (ConnectionState == true)
+        {
+            <button class="reg-btn" @onclick=" async () => await viewModel.ActivateDevice(deviceStateService.SelectedDevice!)">Toggle State</button>
+        }
+        @if (!string.IsNullOrEmpty(viewModel.ResponseMessage))
+        {
+            <p class="text-success success-message">@viewModel.ResponseMessage</p>
+        }
+    </div>
 
-    }
-    else
-    {
-        <p>Loading settings...</p>
-    }
-
-    <button class="reg-btn mt-3" @onclick=" async () => await viewModel.ActivateDevice(deviceStateService.SelectedDevice!)">Toggle State</button>
-    @if (!string.IsNullOrEmpty(viewModel.ResponseMessage))
-    {
-        <p class="text-success success-message">@viewModel.ResponseMessage</p>
-    }
+   
 
 
 </div>
 @code {
     [Parameter] public string deviceId { get; set; } = null!;
-    public SharedResources.Models.DeviceSettings? Settings { get; set; }
+
+    public bool DeviceState { get; set; }
+    public bool ConnectionState { get; set; }
+    public string DeviceId { get; set; } = null!;
+    public string? DeviceName { get; set; }
+    public string? DeviceType { get; set; }
+
+    protected override async Task OnInitializedAsync()
+    {
+        await GetDeviceSettings();
+    }
+
+    public async Task GetDeviceSettings()
+    {
+        DeviceState = deviceStateService.SelectedDevice!.DeviceState;
+        DeviceName = deviceStateService.SelectedDevice.DeviceName;
+        DeviceType = deviceStateService.SelectedDevice.DeviceType;
+        ConnectionState = deviceStateService.SelectedDevice.ConnectionState;
+    }
 
 }

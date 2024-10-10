@@ -83,8 +83,6 @@ public class AzureHub
 
         return devices;
     }
-
-
     public async Task SendDirectMethodAsync(string deviceId, string methodName)
     {
         var devices = await GetDevicesAsync();

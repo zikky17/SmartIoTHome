@@ -48,6 +48,14 @@ public class HomeVM
         {
             var methodName = device.DeviceState ? "stop" : "start";
             await _iotHub.SendDirectMethodAsync(device.DeviceId, methodName);
+            if (methodName == "stop")
+            {
+                device.DeviceState = false;
+            }
+            else
+            {
+                device.DeviceState = true;
+            }
 
             var history = new DeviceStateHistory
             {
@@ -55,6 +63,8 @@ public class HomeVM
                 State = device.DeviceState,
                 TimeStamp = DateTime.Now
             };
+
+            await _context.SaveDeviceHistory(history);
 
         }
         catch (Exception ex)
