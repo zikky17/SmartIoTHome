@@ -35,10 +35,10 @@ namespace SmartFan
                 services.AddTransient<SettingsView>();
                 services.AddTransient<SettingsVM>();
 
-                services.AddSingleton<IDatabaseContext>(sp =>
+                services.AddSingleton<IDbContextWPF>(sp =>
                 {
-                    var logger = sp.GetRequiredService<ILogger<SQLiteContext>>();
-                    return new SQLiteContext(logger, () => Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData));
+                    var logger = sp.GetRequiredService<ILogger<SQLiteContextWPF>>();
+                    return new SQLiteContextWPF(logger, () => Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData));
                 });
             }).Build();
 
@@ -92,7 +92,7 @@ namespace SmartFan
                 };
 
 
-                var database = host!.Services.GetRequiredService<IDatabaseContext>();
+                var database = host!.Services.GetRequiredService<IDbContextWPF>();
 
                 await database.SaveSettingsAsync(settings, null!);
                 await host!.RunAsync(cts.Token);

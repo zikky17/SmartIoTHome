@@ -84,11 +84,6 @@ public class AzureHub
         return devices;
     }
 
-    public string GetHubConnectionString()
-    {
-        return _connectionString;
-    }
-
 
     public async Task SendDirectMethodAsync(string deviceId, string methodName)
     {

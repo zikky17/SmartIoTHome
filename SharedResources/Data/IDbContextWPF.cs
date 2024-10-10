@@ -2,7 +2,7 @@
 
 namespace SharedResources.Data;
 
-public interface IDatabaseContext
+public interface IDbContextWPF
 {
     Task<ResultResponse<DeviceSettings>> GetSettingsAsync(string id);
 
@@ -14,7 +14,5 @@ public interface IDatabaseContext
 
     Task<ResultResponse> DeleteDeviceSettingsAsync(DeviceSettings device);
 
-    Task<ResultResponse> RegisterEmailAddress(HubSettings settings);
 
-    Task<string> GetRegisteredEmailAsync();
 }

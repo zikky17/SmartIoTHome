@@ -6,12 +6,12 @@ using System.Diagnostics;
 
 namespace SharedResources.Data
 {
-    public class SQLiteContext : IDatabaseContext
+    public class SQLiteContextWPF : IDbContextWPF
     {
-        private readonly ILogger<SQLiteContext> _logger;
+        private readonly ILogger<SQLiteContextWPF> _logger;
         private readonly SQLiteAsyncConnection? _context;
 
-        public SQLiteContext(ILogger<SQLiteContext> logger, Func<string> directoryPath, string databaseName = "database.db3")
+        public SQLiteContextWPF(ILogger<SQLiteContextWPF> logger, Func<string> directoryPath, string databaseName = "SmartIoTHome_WPF_DB.db3")
         {
             _logger = logger;
 
@@ -48,8 +48,6 @@ namespace SharedResources.Data
                 else
                 {
                     await _context.CreateTableAsync<DeviceSettings>();
-                    await _context.CreateTableAsync<HubSettings>();
-                    await _context.CreateTableAsync<DeviceStateHistory>();
 
                     _logger.LogInformation("Database tables were created successfully.");
                 }
@@ -188,45 +186,6 @@ namespace SharedResources.Data
             }
         }
 
-        public async Task<ResultResponse> RegisterEmailAddress(HubSettings settings)
-        {
-            var existingSettings = await _context!.Table<HubSettings>().FirstOrDefaultAsync();
-
-            if (existingSettings != null)
-            {
-                var query = "UPDATE HubSettings SET Email = ?";
-                await _context.ExecuteAsync(query, settings.Email);
-                return ResultResponseFactory.Success("Email updated.");
-            }
-            else
-            {
-                await _context.InsertAsync(settings);
-                return ResultResponseFactory.Failed("Update failed.");
-            }
-        }
-
-
-
-        public async Task<string> GetRegisteredEmailAsync()
-        {
-            try
-            {
-                var email = await _context!.Table<HubSettings>().FirstOrDefaultAsync();
-                if (email != null)
-                {
-                    return email.Email;
-                }
-                else
-                {
-                    return "Example.live.se";
-                }
-            }
-            catch (Exception ex)
-            {
-                Debug.WriteLine(ex.Message);
-                return "";
-            }
-
-        }
+      
     }
 }

@@ -4,10 +4,10 @@ namespace SmartHub
 {
     public partial class App : Application
     {
-        private readonly IDatabaseContext _databaseContext;
+        private readonly IDbContextMAUI _databaseContext;
 
 
-        public App(IDatabaseContext databaseContext)
+        public App(IDbContextMAUI databaseContext)
         {
             InitializeComponent();
             _databaseContext = databaseContext;

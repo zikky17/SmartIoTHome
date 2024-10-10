@@ -8,12 +8,11 @@ namespace SmartHub.ViewModels
 {
     public partial class SettingsVM : ObservableObject
     {
-        private readonly IDatabaseContext _context;
+        private readonly IDbContextMAUI _context;
 
-        public SettingsVM(IDatabaseContext context, AzureHub hub)
+        public SettingsVM(IDbContextMAUI context)
         {
             _context = context;
-            _hub = hub;
             LoadHubSettings();
         }
 
@@ -37,7 +36,7 @@ namespace SmartHub.ViewModels
         public async Task SaveEmailAddress()
         {
           await _context.RegisterEmailAddress(Settings);
-          Message = $"{Settings.Email} saved as current email address.";
+          Message = $"{Settings.Email} Saved.";
           await LoadEmailAddressAsync();
         }
 

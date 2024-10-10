@@ -7,12 +7,10 @@ namespace SmartHub.ViewModels;
 
 public class DeviceSettingsVM
 {
-    private readonly IDatabaseContext _context;
     private readonly AzureHub _iotHub;
 
-    public DeviceSettingsVM(IDatabaseContext context, AzureHub iotHub)
+    public DeviceSettingsVM(AzureHub iotHub)
     {
-        _context = context;
         _iotHub = iotHub;
     }
 
@@ -46,15 +44,15 @@ public class DeviceSettingsVM
         {
             var methodName = device.DeviceState ? "stop" : "start";
             await _iotHub.SendDirectMethodAsync(device.DeviceId, methodName);
-            var settings = await _context.GetSettingsAsync(device.DeviceId);
-            if (methodName == "stop")
-            {
-                settings.Content!.DeviceState = false;
-            }
-            else
-            {
-                settings.Content!.DeviceState = true;
-            }
+            //var settings = await _context.GetSettingsAsync(device.DeviceId);
+            //if (methodName == "stop")
+            //{
+            //    settings.Content!.DeviceState = false;
+            //}
+            //else
+            //{
+            //    settings.Content!.DeviceState = true;
+            //}
 
             var history = new DeviceStateHistory
             {
@@ -65,7 +63,7 @@ public class DeviceSettingsVM
 
 
 
-            await _context.SaveSettingsAsync(settings.Content, history);
+            //await _context.SaveSettingsAsync(settings.Content, history);
 
         }
         catch (Exception ex)

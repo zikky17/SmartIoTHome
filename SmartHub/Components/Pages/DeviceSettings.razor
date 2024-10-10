@@ -3,7 +3,6 @@
 @using SharedResources.Services
 @using SmartHub.ViewModels
 @inject DeviceSettingsVM viewModel
-@inject IDatabaseContext _databaseContext
 @inject DeviceStateService deviceStateService
 
 @page "/device-settings/{deviceId}"
@@ -53,13 +52,4 @@
     [Parameter] public string deviceId { get; set; } = null!;
     public SharedResources.Models.DeviceSettings? Settings { get; set; }
 
-    protected override async Task OnInitializedAsync()
-    {
-        var result = await _databaseContext.GetSettingsAsync(deviceId);
-        if (result.Succeeded)
-        {
-            Settings = result.Content;
-        }
-
-    }
 }

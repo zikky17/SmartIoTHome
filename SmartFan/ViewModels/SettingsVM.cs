@@ -14,14 +14,14 @@ namespace SmartFan.ViewModels
     public partial class SettingsVM : ObservableObject
     {
         private readonly IServiceProvider _serviceProvider;
-        private readonly IDatabaseContext _databaseContext;
+        private readonly IDbContextWPF _databaseContext;
 
         public SmartFanModel SmartFanModel { get; set; }
         public DeviceSettings DeviceSettings;
         public List<DeviceStateHistory> DeviceHistory;
 
 
-        public SettingsVM(IDatabaseContext databaseContext, IServiceProvider serviceProvider)
+        public SettingsVM(IDbContextWPF databaseContext, IServiceProvider serviceProvider)
         {
             _databaseContext = databaseContext;
             _serviceProvider = serviceProvider;

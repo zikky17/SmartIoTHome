@@ -19,9 +19,9 @@ public class HomeVM
     public int TimerInterval { get; set; } = 4000;
     public string? ResponseMessage { get; private set; }
     private readonly NavigationManager _navigationManager;
-    private readonly IDatabaseContext _context;
+    private readonly IDbContextMAUI _context;
 
-    public HomeVM(AzureHub iotHub, HttpClient http, NavigationManager navigationManager, IDatabaseContext context, DeviceStateService deviceStateService)
+    public HomeVM(AzureHub iotHub, HttpClient http, NavigationManager navigationManager, IDbContextMAUI context, DeviceStateService deviceStateService)
     {
         _iotHub = iotHub;
         _http = http;
@@ -48,15 +48,6 @@ public class HomeVM
         {
             var methodName = device.DeviceState ? "stop" : "start";
             await _iotHub.SendDirectMethodAsync(device.DeviceId, methodName);
-            var settings = await _context.GetSettingsAsync(device.DeviceId);
-            if (methodName == "stop")
-            {
-                settings.Content!.DeviceState = false;
-            }
-            else
-            {
-                settings.Content!.DeviceState = true;
-            }
 
             var history = new DeviceStateHistory
             {
@@ -64,8 +55,6 @@ public class HomeVM
                 State = device.DeviceState,
                 TimeStamp = DateTime.Now
             };
-
-           await _context.SaveSettingsAsync(settings.Content, history);
 
         }
         catch (Exception ex)
