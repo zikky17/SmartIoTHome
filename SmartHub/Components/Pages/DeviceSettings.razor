@@ -28,11 +28,11 @@
         </div>
         <div>
             <h2>Connection State:</h2>
-            <h6 style="place-items: end;">@ConnectionState</h6>
+            <h6 style="place-items: end;">@(ConnectionState ? "On" : "Off")</h6>
         </div>
         <div>
             <h2>Device State:</h2>
-            <h6 class="connection-string-wrap">@DeviceState</h6>
+            <h6 class="connection-string-wrap">@(DeviceState ? "On" : "Off")</h6>
         </div>
         @if (ConnectionState == true)
         {
