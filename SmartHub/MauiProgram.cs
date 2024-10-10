@@ -28,7 +28,18 @@ namespace SmartHub
             builder.Services.AddSingleton<IDbContextMAUI>(sp =>
             {
                 var logger = sp.GetRequiredService<ILogger<SQLiteContextMAUI>>();
-                return new SQLiteContextMAUI(logger, () => Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData));
+                return new SQLiteContextMAUI(logger, () =>
+                {
+                    var databaseFolderPath = @"C:\Databases";
+
+                    if (!Directory.Exists(databaseFolderPath))
+                    {
+                        Directory.CreateDirectory(databaseFolderPath);
+                    }
+
+                    return databaseFolderPath;
+                });
+
             });
 
     		builder.Services.AddBlazorWebViewDeveloperTools();

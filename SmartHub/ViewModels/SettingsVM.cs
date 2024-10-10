@@ -13,11 +13,11 @@ namespace SmartHub.ViewModels
         public SettingsVM(IDbContextMAUI context)
         {
             _context = context;
-            LoadHubSettings();
+            LoadHubSettings().GetAwaiter();
         }
 
         [ObservableProperty]
-        public string hubConnectionString = null!;
+        public string? hubConnectionString;
 
         [ObservableProperty]
         public HubSettings settings = new();
@@ -28,10 +28,10 @@ namespace SmartHub.ViewModels
 
         private readonly AzureHub _hub;
         
-        private void LoadHubSettings()
+        private async Task LoadHubSettings()
         {
-            var connectionString = _context.GetHubConnectionString();
-            HubConnectionString = connectionString.Result.ToString();
+            var connectionString = await _context.GetHubConnectionString();
+            HubConnectionString = connectionString.ToString();
         }
 
         public async Task SaveEmailAddress()

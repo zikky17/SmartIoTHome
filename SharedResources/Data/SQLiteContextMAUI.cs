@@ -62,7 +62,9 @@ namespace SharedResources.Data
                         {
                             var newSettings = new HubSettings
                             {
-                                HubConnectionString = hubConnectionString
+                                HubConnectionString = hubConnectionString,
+                                Email = "Test@live.se"
+                                
                             };
 
                             await _context.InsertAsync(newSettings);
@@ -127,11 +129,10 @@ namespace SharedResources.Data
         {
             try
             {
-                var latestHubSettings = await _context!.Table<HubSettings>()
-                        .FirstOrDefaultAsync();
-                if (latestHubSettings != null)
+                var settings = await _context!.Table<HubSettings>().FirstOrDefaultAsync();
+                if (settings != null)
                 {
-                    return latestHubSettings.HubConnectionString;
+                    return settings.HubConnectionString;
                 }
                 else
                 {
