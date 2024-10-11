@@ -1,10 +1,12 @@
 ﻿using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using DotNetty.Handlers.Tls;
+using Microsoft.Azure.Devices.Client;
 using Microsoft.Extensions.DependencyInjection;
 using SharedResources.Data;
 using SharedResources.Models;
 using SmartTemperature.Models;
+using System.Diagnostics;
 using System.Text;
 using System.Windows;
 
@@ -46,6 +48,45 @@ namespace SmartTemperature.ViewModels
                 SmartTempModel.DeviceState = SmartTempModel.DeviceState == "False" ? "Off" : "On";
 
                 SmartTempModel.HasSettings = true;
+            }
+
+            await GetTwinProperties();
+        }
+
+        public async Task GetTwinProperties()
+        {
+            var connectionString = "HostName=gurra-iothub.azure-devices.net;DeviceId=798197a0-e07f-453c-92c5-9a2121a2d673;SharedAccessKey=KaJ+2FmYJPW2L2OVn84wX5fSC3hgVHCbfAIoTFAUVuA=";
+
+            var client = DeviceClient.CreateFromConnectionString(connectionString, TransportType.Mqtt);
+
+            try
+            {
+                var twin = await client.GetTwinAsync();
+
+                var reportedProperties = twin.Properties.Reported;
+
+                if (reportedProperties.Contains("deviceState"))
+                {
+                    SmartTempModel.DeviceState = (string)reportedProperties["deviceState"];
+                    if (SmartTempModel.DeviceState == "False")
+                    {
+                        SmartTempModel.DeviceState = "Off";
+                    }
+                    else
+                    {
+                        SmartTempModel.DeviceState = "On";
+                    }
+                }
+                else
+                {
+                    Debug.WriteLine("DeviceState not found in reported properties.");
+
+                }
+            }
+            catch (Exception ex)
+            {
+                Debug.WriteLine($"Error retrieving twin: {ex.Message}");
+
             }
         }
 

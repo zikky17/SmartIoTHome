@@ -39,15 +39,8 @@
               Orientation="Horizontal">
                 <TextBlock Text="Device State:" 
              FontWeight="SemiBold" 
-             HorizontalAlignment="Center"
-             Margin="100, 0, 0, 0"/>
-
-                <Button Content="History"
-              Padding="3"
-              Command="{Binding OpenHistoryCommand}"
-              CommandParameter="{Binding SmartTempModel.Id}"
-              Margin="60, 0, 0, 0" />
-
+             HorizontalAlignment="Center" />
+          
             </StackPanel>
             <TextBlock Foreground="#dedede" Text="{Binding SmartTempModel.DeviceState}" FontFamily="{StaticResource poppins-light}" HorizontalAlignment="Center" Margin="0, 5, 0, 10" />
             

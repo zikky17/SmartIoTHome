@@ -1,9 +1,11 @@
 ﻿using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
+using Microsoft.Azure.Devices.Client;
 using Microsoft.Extensions.DependencyInjection;
 using SharedResources.Data;
 using SharedResources.Models;
 using SmartLight.Models;
+using System.Diagnostics;
 using System.Text;
 using System.Windows;
 
@@ -25,8 +27,7 @@ namespace SmartLight.ViewModels
             _databaseContext = databaseContext;
             _serviceProvider = serviceProvider;
             SmartLightModel = new SmartLightModel();
-            LoadSettingsAsync().ConfigureAwait(false);
-            GetTwinProperties().ConfigureAwait(false);
+            LoadSettingsAsync().ConfigureAwait(false);         
 
         }
 
@@ -34,8 +35,37 @@ namespace SmartLight.ViewModels
         {
             var connectionString = "HostName=gurra-iothub.azure-devices.net;DeviceId=f0468151-3b8b-4d92-8e42-cf679a27796f;SharedAccessKey=6ycjkPeWyIRubkKcKX9BjTmOuZn0mBr6tAIoTN5ynLI=";
 
-            var twin = await SharedResourcesWPF.GetDeviceTwin.GetTwinProperties(connectionString);
-            SmartLightModel.DeviceState = twin;
+            var client = DeviceClient.CreateFromConnectionString(connectionString, TransportType.Mqtt);
+
+            try
+            {
+                var twin = await client.GetTwinAsync();
+
+                var reportedProperties = twin.Properties.Reported;
+
+                if (reportedProperties.Contains("deviceState"))
+                {
+                    SmartLightModel.DeviceState = (string)reportedProperties["deviceState"];
+                    if (SmartLightModel.DeviceState == "False")
+                    {
+                        SmartLightModel.DeviceState = "Off";
+                    }
+                    else
+                    {
+                        SmartLightModel.DeviceState = "On";
+                    }
+                }
+                else
+                {
+                    Debug.WriteLine("DeviceState not found in reported properties.");
+
+                }
+            }
+            catch (Exception ex)
+            {
+                Debug.WriteLine($"Error retrieving twin: {ex.Message}");
+
+            }
         }
 
         private async Task LoadSettingsAsync()
@@ -49,10 +79,10 @@ namespace SmartLight.ViewModels
                 SmartLightModel.Location = DeviceSettings.Location!;
                 SmartLightModel.Type = DeviceSettings.Type!;
                 SmartLightModel.ConnectionString = DeviceSettings.ConnectionString!;
-                SmartLightModel.DeviceState = DeviceSettings.DeviceState.ToString();
-                SmartLightModel.DeviceState = SmartLightModel.DeviceState == "False" ? "Off" : "On";
                 SmartLightModel.HasSettings = true;
             }
+
+            await GetTwinProperties();
         }
 
         [RelayCommand]

@@ -1,5 +1,7 @@
-﻿using SmartLight.ViewModels;
+﻿using CommunityToolkit.Mvvm.Input;
+using SmartLight.ViewModels;
 using System.Windows.Controls;
+using System.Windows.Media.Animation;
 
 namespace SmartLight.Views
 {
@@ -11,6 +13,13 @@ namespace SmartLight.Views
         public HomeView()
         {
             InitializeComponent();
+            StartAnimation();
+        }
+
+        public void StartAnimation()
+        {
+            BeginStoryboard storyboard = (BeginStoryboard)this.FindResource("glow-sb");
+            storyboard.Storyboard.Begin();
         }
     }
 }

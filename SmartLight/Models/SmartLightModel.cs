@@ -8,18 +8,18 @@ namespace SmartLight.Models
         public bool hasSettings;
 
         [ObservableProperty]
-        public string id;
+        public string? id;
 
         [ObservableProperty]
-        public string location;
+        public string? location;
 
         [ObservableProperty]
-        public string type;
+        public string? type;
 
         [ObservableProperty]
-        public string connectionString;
+        public string? connectionString;
 
         [ObservableProperty]
-        public string deviceState;
+        public string? deviceState;
     }
 }

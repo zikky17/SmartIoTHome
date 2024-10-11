@@ -16,7 +16,14 @@ namespace SmartFan.Views
     {
         public HomeView()
         {
-            InitializeComponent();       
+            InitializeComponent();
+            StartAnimation();
+        }
+
+        public void StartAnimation()
+        {
+            BeginStoryboard storyboard = (BeginStoryboard)this.FindResource("rotate-sb");
+            storyboard.Storyboard.Begin();
         }
     }
 }
