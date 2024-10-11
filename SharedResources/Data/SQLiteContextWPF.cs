@@ -47,10 +47,25 @@ namespace SharedResources.Data
                 }
                 else
                 {
-                    await _context.CreateTableAsync<DeviceSettings>();
-                    await _context.CreateTableAsync<DeviceStateHistory>();
+                    var deviceSettingsExists = await _context.ExecuteScalarAsync<int>(
+                        "SELECT COUNT(*) FROM sqlite_master WHERE type='table' AND name='DeviceSettings'");
 
-                    _logger.LogInformation("Database tables were created successfully.");
+                    var deviceStateHistoryExists = await _context.ExecuteScalarAsync<int>(
+                        "SELECT COUNT(*) FROM sqlite_master WHERE type='table' AND name='DeviceStateHistory'");
+
+                    if (deviceSettingsExists == 0 && deviceStateHistoryExists == 0)
+                    {
+                        await _context.CreateTableAsync<DeviceSettings>();
+                        await _context.CreateTableAsync<DeviceStateHistory>();
+
+                        _logger.LogInformation("Both tables were created successfully.");
+                    }
+                    else
+                    {
+                        _logger.LogInformation("One or both tables already exist.");
+                    }
+
+
                 }
             }
             catch (Exception ex)

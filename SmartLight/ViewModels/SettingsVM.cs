@@ -26,7 +26,16 @@ namespace SmartLight.ViewModels
             _serviceProvider = serviceProvider;
             SmartLightModel = new SmartLightModel();
             LoadSettingsAsync().ConfigureAwait(false);
+            GetTwinProperties().ConfigureAwait(false);
 
+        }
+
+        public async Task GetTwinProperties()
+        {
+            var connectionString = "HostName=gurra-iothub.azure-devices.net;DeviceId=f0468151-3b8b-4d92-8e42-cf679a27796f;SharedAccessKey=6ycjkPeWyIRubkKcKX9BjTmOuZn0mBr6tAIoTN5ynLI=";
+
+            var twin = await SharedResourcesWPF.GetDeviceTwin.GetTwinProperties(connectionString);
+            SmartLightModel.DeviceState = twin;
         }
 
         private async Task LoadSettingsAsync()

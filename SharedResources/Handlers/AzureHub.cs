@@ -23,66 +23,53 @@ public class AzureHub
     {
         var query = _registry!.CreateQuery("SELECT * FROM DEVICES");
         var devices = new List<SmartDeviceModel>();
-        int retryCount = 0;
-        int maxRetries = 5;
-        int delaySeconds = 10;
-
-        while (retryCount < maxRetries)
+        try
         {
-            try
+            foreach (var twin in await query.GetNextAsTwinAsync())
             {
-                foreach (var twin in await query.GetNextAsTwinAsync())
+                var device = new SmartDeviceModel
                 {
-                    var device = new SmartDeviceModel
-                    {
-                        DeviceId = twin.DeviceId
-                    };
+                    DeviceId = twin.DeviceId
+                };
 
-                    try { device.DeviceName = twin?.Properties?.Reported["deviceName"]?.ToString(); }
-                    catch { device.DeviceName = "Unknown"; }
+                try { device.DeviceName = twin?.Properties?.Reported["deviceName"]?.ToString(); }
+                catch { device.DeviceName = "Unknown"; }
 
-                    try { device.DeviceType = twin?.Properties?.Reported["deviceType"]?.ToString(); }
-                    catch { device.DeviceType = "Unknown"; }
+                try { device.DeviceType = twin?.Properties?.Reported["deviceType"]?.ToString(); }
+                catch { device.DeviceType = "Unknown"; }
 
+                try
+                {
+                    bool.TryParse(twin?.Properties?.Reported["connectionState"]?.ToString(), out bool connectionState);
+                    device.ConnectionState = connectionState;
+                }
+                catch { device.ConnectionState = false; }
+
+                if (device.ConnectionState)
+                {
                     try
                     {
-                        bool.TryParse(twin?.Properties?.Reported["connectionState"]?.ToString(), out bool connectionState);
-                        device.ConnectionState = connectionState;
+                        bool.TryParse(twin?.Properties?.Reported["deviceState"]?.ToString(), out bool deviceState);
+                        device.DeviceState = deviceState;
                     }
-                    catch { device.ConnectionState = false; }
-
-                    if (device.ConnectionState)
-                    {
-                        try
-                        {
-                            bool.TryParse(twin?.Properties?.Reported["deviceState"]?.ToString(), out bool deviceState);
-                            device.DeviceState = deviceState;
-                        }
-                        catch { device.DeviceState = false; }
-                    }
-                    else
-                    {
-                        device.DeviceState = false;
-                    }
-
-                    devices.Add(device);
+                    catch { device.DeviceState = false; }
                 }
-                break; 
-            }
-            catch (ThrottlingException)
-            {
-                retryCount++;
-                if (retryCount >= maxRetries)
+                else
                 {
-                    throw;
+                    device.DeviceState = false;
                 }
-                await Task.Delay(delaySeconds * 1000);
-                delaySeconds *= 2; 
+
+                devices.Add(device);
             }
         }
-
+        catch (ThrottlingException ex)
+        {
+            Debug.WriteLine(ex.Message);
+        }
         return devices;
     }
+
+
     public async Task SendDirectMethodAsync(string deviceId, string methodName)
     {
         var devices = await GetDevicesAsync();

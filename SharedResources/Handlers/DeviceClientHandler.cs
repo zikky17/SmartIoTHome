@@ -27,8 +27,6 @@ namespace SharedResources.Handlers
 
             try
             {
-
-
                 _client = DeviceClient.CreateFromConnectionString(Settings.ConnectionString);
 
                 if (_client != null)

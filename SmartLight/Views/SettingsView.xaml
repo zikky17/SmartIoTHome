@@ -58,7 +58,7 @@
 
             <StackPanel Visibility="{Binding SmartLightModel.HasSettings, Converter={StaticResource BoolConverter}}">
                 <TextBlock Text="Device ID cannot be changed." 
-               Foreground="#dedede"
+               Foreground="red"
                Margin="10, 0, 0, 10"
                HorizontalAlignment="Center"/>
 

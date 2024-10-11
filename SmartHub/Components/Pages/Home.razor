@@ -109,7 +109,7 @@
 
     private string GetIconClass(string deviceType)
     {
-        return (string)iconConverter.Convert(deviceType!, typeof(string), null, CultureInfo.InvariantCulture);
+        return (string)iconConverter.Convert(deviceType!, typeof(string), null, CultureInfo.InvariantCulture)!;
     }
 
     private string GetDeviceCssClass(SmartDeviceModel device)

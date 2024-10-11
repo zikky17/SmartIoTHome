@@ -8,12 +8,10 @@ namespace SmartHub.ViewModels;
 public class DeviceSettingsVM
 {
     private readonly AzureHub _iotHub;
-    private readonly IDbContextMAUI _context;
 
-    public DeviceSettingsVM(AzureHub iotHub, IDbContextMAUI context)
+    public DeviceSettingsVM(AzureHub iotHub)
     {
         _iotHub = iotHub;
-        _context = context;
     }
 
    
@@ -49,16 +47,6 @@ public class DeviceSettingsVM
             {
                 device.DeviceState = true;
             }
-
-            var history = new DeviceStateHistory
-            {
-                Id = device.DeviceId,
-                State = device.DeviceState,
-                TimeStamp = DateTime.Now
-            };
-
-            await _context.SaveDeviceHistory(history);
-
         }
         catch (Exception ex)
         {

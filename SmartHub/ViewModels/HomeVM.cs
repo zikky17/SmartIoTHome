@@ -16,18 +16,18 @@ public class HomeVM
     private readonly DeviceStateService _deviceStateService;
 
     public Timer? Timer { get; set; }
-    public int TimerInterval { get; set; } = 4000;
+    public int TimerInterval { get; set; } = 12000;
     public string? ResponseMessage { get; private set; }
     private readonly NavigationManager _navigationManager;
-    private readonly IDbContextMAUI _context;
+    private readonly IDbContextMAUI _mauiContext;
 
-    public HomeVM(AzureHub iotHub, HttpClient http, NavigationManager navigationManager, IDbContextMAUI context, DeviceStateService deviceStateService)
+    public HomeVM(AzureHub iotHub, HttpClient http, NavigationManager navigationManager, DeviceStateService deviceStateService, IDbContextMAUI mauiContext)
     {
         _iotHub = iotHub;
         _http = http;
         _navigationManager = navigationManager;
-        _context = context;
         _deviceStateService = deviceStateService;
+        _mauiContext = mauiContext;
     }
 
     public async Task<IEnumerable<SmartDeviceModel>> GetDevicesAsync()
@@ -56,16 +56,6 @@ public class HomeVM
             {
                 device.DeviceState = true;
             }
-
-            var history = new DeviceStateHistory
-            {
-                Id = device.DeviceId,
-                State = device.DeviceState,
-                TimeStamp = DateTime.Now
-            };
-
-            await _context.SaveDeviceHistory(history);
-
         }
         catch (Exception ex)
         {
@@ -87,7 +77,7 @@ public class HomeVM
                 {
                     ResponseMessage = $"{device.DeviceName} is now deleted.";
                     var email = new EmailCommunication();
-                    email.Send(await _context.GetRegisteredEmailAsync(), "Azure IoT Hub Notification", $"Your Device {device.DeviceName} was deleted.", "");
+                    email.Send(await _mauiContext.GetRegisteredEmailAsync(), "Azure IoT Hub Notification", $"Your Device {device.DeviceName} was deleted.", "");
                     await HideMessageAfterDelay();
                 }
                 else

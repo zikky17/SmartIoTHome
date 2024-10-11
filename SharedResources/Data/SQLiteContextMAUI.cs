@@ -37,6 +37,8 @@ namespace SharedResources.Data
             }
         }
 
+
+
         public async Task CreateTablesAsync()
         {
             try
@@ -48,31 +50,42 @@ namespace SharedResources.Data
                 }
                 else
                 {
-                    await _context.CreateTableAsync<HubSettings>();
+                    var hubSettingsExists = await _context.ExecuteScalarAsync<int>(
+                        "SELECT COUNT(*) FROM sqlite_master WHERE type='table' AND name='HubSettings'");
 
-                    _logger.LogInformation("Database tables were created successfully.");
-                    var hubConnectionString = "HostName=gurra-iothub.azure-devices.net;SharedAccessKeyName=iothubowner;SharedAccessKey=/6xdlTOp1WhRRbgMsWuAS+FCnQSBLRI9BAIoTAU4LdE=";
-
-                    try
+                    if (hubSettingsExists == 0)
                     {
-                        var settings = await _context.Table<HubSettings>().FirstOrDefaultAsync();
+                        await _context.CreateTableAsync<HubSettings>();
 
-                        if (settings == null || settings.HubConnectionString == null)
+                        var hubConnectionString = "HostName=gurra-iothub.azure-devices.net;SharedAccessKeyName=iothubowner;SharedAccessKey=/6xdlTOp1WhRRbgMsWuAS+FCnQSBLRI9BAIoTAU4LdE=";
+
+                        try
                         {
-                            var newSettings = new HubSettings
-                            {
-                                HubConnectionString = hubConnectionString,
-                                Email = "Test@live.se"
-                                
-                            };
+                            var settings = await _context.Table<HubSettings>().FirstOrDefaultAsync();
 
-                            await _context.InsertAsync(newSettings);
-                            _logger.LogInformation("HubConnectionString has been inserted successfully.");
+                            if (settings == null || settings.HubConnectionString == null)
+                            {
+                                var newSettings = new HubSettings
+                                {
+                                    HubConnectionString = hubConnectionString,
+                                    Email = "Test@live.se"
+                                };
+
+                                await _context.InsertAsync(newSettings);
+                                _logger.LogInformation("Seeded settings successfully.");
+                            }
                         }
+                        catch (Exception ex)
+                        {
+                            Debug.WriteLine(ex.Message);
+                        }
+
+
+                        _logger.LogInformation("Both tables were created successfully.");
                     }
-                    catch (Exception ex)
+                    else
                     {
-                        Debug.WriteLine(ex.Message);
+                        _logger.LogInformation("The table already exists.");
                     }
 
                 }

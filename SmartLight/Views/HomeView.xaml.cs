@@ -8,7 +8,6 @@ namespace SmartLight.Views
     /// </summary>
     public partial class HomeView : UserControl
     {
-
         public HomeView()
         {
             InitializeComponent();
