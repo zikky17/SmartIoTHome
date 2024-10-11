@@ -163,5 +163,11 @@ namespace SharedResources.Data
         {
             await _context!.InsertAsync(history);
         }
+
+        public async Task SaveConnectionString(HubSettings settings)
+        {
+            var query = "UPDATE HubSettings SET HubConnectionString = ?";
+            await _context!.ExecuteAsync(query, settings.HubConnectionString);
+        }
     }
 }

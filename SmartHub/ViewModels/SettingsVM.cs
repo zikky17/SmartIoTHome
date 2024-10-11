@@ -34,6 +34,18 @@ namespace SmartHub.ViewModels
             HubConnectionString = connectionString.ToString();
         }
 
+        public async Task SaveConnectionString()
+        {
+            var settings = new HubSettings
+            {
+                Email = CurrentEmail,
+                HubConnectionString = Settings.HubConnectionString
+            };
+
+            await _context.SaveConnectionString(settings);
+            Message = "Connection String saved.";
+        }
+
         public async Task SaveEmailAddress()
         {
           await _context.RegisterEmailAddress(Settings);

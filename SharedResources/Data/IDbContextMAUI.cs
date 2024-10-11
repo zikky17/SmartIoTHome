@@ -9,5 +9,6 @@ namespace SharedResources.Data
         Task<string> GetRegisteredEmailAsync();
         Task<string> GetHubConnectionString();
         Task SaveDeviceHistory(DeviceStateHistory history);
+        Task SaveConnectionString(HubSettings settings);
     }
 }

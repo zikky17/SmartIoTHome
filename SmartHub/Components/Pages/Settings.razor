@@ -4,10 +4,17 @@
 
 
 
-<div class="container new-device-container">
+<div class="container new-device-container scrollable-container">
     <h2 class="cs-styling">Azure IoT Connection String:</h2>
     <div class="cs-box">
         <h6 class="para-string">@viewModel.HubConnectionString</h6>
+    </div>
+    <div class="">
+        <label for="connectionString">New Connection String:</label>
+        <input id="connectionString" @bind="viewModel.Settings.HubConnectionString" />
+    </div>
+    <div class="button-box mt-3">
+        <button class="reg-btn" @onclick="async () => await SaveConnectionString()">Save</button>
     </div>
     <div class="cs-box">
         <h2 class="cs-styling">Current Email:</h2>
@@ -19,7 +26,7 @@
             <input id="emailFromUser" @bind="viewModel.Settings.Email" />
         </div>
         <div class="button-box mt-3">
-            <button class="reg-btn" @onclick="async () => await SaveEmailAddress()">Register</button>
+            <button class="reg-btn" @onclick="async () => await SaveEmailAddress()">Save</button>
         </div>
     </div>
   
@@ -44,5 +51,10 @@
     {
         await viewModel.SaveEmailAddress();
         StateHasChanged();
+    }
+
+    private async Task SaveConnectionString()
+    {
+        await viewModel.SaveConnectionString();
     }
 }
